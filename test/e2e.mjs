@@ -60,6 +60,7 @@ ok('vibe counts sum to 184', (await page.$$eval('.vibe .data', n=>n.map(x=>parse
 ok('trust 98.4%', (await page.textContent('.trust-grid')).includes('98.4%'));
 ok('3 guides', (await page.$$('.guide-card')).length === 3);
 ok('field kit heading', body.includes('Plan less.') && body.includes('Walk in ready.'));
+ok('field kit image hierarchy', (await page.$$('.kit-tile-main')).length === 1 && (await page.$$('.kit-tile-pass')).length === 1);
 ok('3 hosts named', ['Eko Wave Collective','Naija Food Trails','Terra Culture House'].every(n=>body.includes(n)));
 ok('cta heading', body.includes('Your next story is already happening.'));
 ok('footer legal', body.includes('© 2026 NaijaGo Ltd · Lagos') && body.includes('Naira prices · NDPR minded'));

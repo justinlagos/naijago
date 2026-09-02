@@ -1,6 +1,6 @@
 # NaijaGo — working prototype and design handoff
 
-Version 1.1 · 2 September 2026
+Version 1.2 · 2 September 2026
 
 A complete, clickable frontend of NaijaGo: every screen, every state, every
 flow. No backend, no database, no persistence. Built on the real design from
@@ -10,6 +10,9 @@ product flows wired into it.
 Version 1.1 adds the approved geometric brand-icon family across discovery,
 booking, passes, account and partner surfaces, plus the UI fixes documented in
 `docs/UI-AUDIT.md`.
+
+Version 1.2 rebuilds the homepage field-kit composition with proportionate
+landscape imagery, a layered pass card and dedicated responsive layouts.
 
 ---
 

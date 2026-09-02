@@ -33,9 +33,13 @@
   .trust-grid{grid-template-columns:1fr}
   .guide-grid{grid-template-columns:1fr}
   .guide-card.featured{grid-row:auto}
+  .field-kit{padding:72px 0 84px}
   .field-kit-grid{grid-template-columns:1fr}
-  .kit-gallery{order:-1}
-  .kit-copy{padding:56px 0}
+  .kit-gallery{order:-1;min-height:510px;padding:30px 0 44px 48px;margin-bottom:8px}
+  .kit-gallery::before{inset:0 calc(var(--gutter) * -1) 0 20%}
+  .kit-tile-main{min-height:430px}
+  .kit-tile-pass{width:min(38%,270px);min-height:310px}
+  .kit-copy{padding:48px 0 0;max-width:680px}
   .host-strip{grid-template-columns:1fr 1fr}
   .host-lead{grid-column:span 2}
 
@@ -86,6 +90,16 @@
   .experience-card{flex:0 0 82vw;scroll-snap-align:start}
 
   .vibe-grid{grid-template-columns:repeat(2,1fr)}
+  .field-kit{padding:48px 0 64px}
+  .field-kit-grid{gap:0}
+  .kit-gallery{min-height:auto;padding:28px 0 0;margin:0}
+  .kit-gallery::before{inset:0 calc(var(--gutter) * -1) 18% 24%}
+  .kit-index{right:0;top:0}
+  .kit-tile-main{min-height:0;aspect-ratio:4/3}
+  .kit-tile-main figcaption{width:100%;padding:16px 18px}
+  .kit-tile-main figcaption strong{font-size:15px}
+  .kit-tile-pass{position:relative;left:auto;bottom:auto;width:72%;min-height:0;aspect-ratio:4/3;margin:-34px 0 0 auto}
+  .kit-copy{padding:48px 0 0}
   .host-strip{grid-template-columns:1fr}
   .host-lead{grid-column:auto}
   .cta{padding:64px 0}

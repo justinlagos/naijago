@@ -145,7 +145,7 @@ system are avatars, the hero pulse and notification dots.
 | `.vibe` | Bordered cell on ink, white-and-gold brand icon, count in `--gold-on-ink`. |
 | `.trust-grid` | `1.1fr 1fr 1fr`; lead cell solid gold with ink text. |
 | `.guide-grid` | `1.25fr 1fr`; featured card spans two rows over an image. |
-| `.field-kit` | Sand band, `.88fr 1.12fr`, gallery moves to `order:-1` under 1100. |
+| `.field-kit` | Sand editorial band, `.76fr 1.24fr`; a landscape lead image anchors a layered pass card, then becomes a controlled image-first stack under 1100. |
 | `.host-strip` | `1.15fr repeat(3,1fr)`, 48px ink/gold avatar, teal verified chip. |
 | `.hold` | Clock + bar + note; `data-warn="true"` at 3 minutes turns the whole strip amber. |
 | `.pass` | Ink card, dashed head rule, white code panel, state stamp, coloured status bar per state. |

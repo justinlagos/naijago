@@ -161,8 +161,13 @@
           '<a class="kit-link" href="#/guide/three-moods">Preview the Lagos guide →</a>' +
         '</div>' +
         '<div class="kit-gallery">' +
-          '<figure class="kit-tile" style="background-image:url(' + img('beach-rave.jpg') + ')"><figcaption>Your pass · ready at the gate</figcaption></figure>' +
-          '<figure class="kit-tile" style="background-image:url(' + img('lagos-water.jpg') + ')"><figcaption>Lagos · read it properly</figcaption></figure>' +
+          '<span class="kit-index" aria-hidden="true">01 · Lagos field notes</span>' +
+          '<figure class="kit-tile kit-tile-main" style="background-image:url(' + img('lagos-water.jpg') + ')">' +
+            '<figcaption><span>Lagos guide</span><strong>Move through the city like you know it.</strong></figcaption>' +
+          '</figure>' +
+          '<figure class="kit-tile kit-tile-pass" style="background-image:url(' + img('beach-rave.jpg') + ')">' +
+            '<figcaption><span>Your NaijaGo pass</span><strong>Saved. Offline. Ready at the gate.</strong></figcaption>' +
+          '</figure>' +
         '</div>' +
       '</div></div>' +
     '</section>';

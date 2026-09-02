@@ -1,4 +1,4 @@
-# UI audit — version 1.1
+# UI audit — version 1.2
 
 Reviewed 2 September 2026 against the supplied Follow the vibe and brand-icon
 references.
@@ -23,6 +23,17 @@ references.
   project-relative paths and an optional `PLAYWRIGHT_CHROMIUM_PATH` override.
 - Added a deterministic production build that excludes tests and documentation
   from Netlify's public output.
+
+## Version 1.2 section refinement
+
+- Rebuilt the homepage field-kit section around the source images' landscape
+  proportions instead of forcing both photographs into narrow portrait crops.
+- Introduced one clear lead image and a secondary layered pass card, with
+  captions attached to their relevant image rather than floating as poster
+  labels.
+- Added dedicated tablet and mobile compositions. The overlap becomes a
+  controlled stack on small screens, preserving content order and avoiding
+  horizontal overflow.
 
 ## Deliberate prototype constraints
 
