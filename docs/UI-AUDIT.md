@@ -1,4 +1,4 @@
-# UI audit — version 1.2
+# UI audit — version 1.3
 
 Reviewed 2 September 2026 against the supplied Follow the vibe and brand-icon
 references.
@@ -34,6 +34,20 @@ references.
 - Added dedicated tablet and mobile compositions. The overlap becomes a
   controlled stack on small screens, preserving content order and avoiding
   horizontal overflow.
+
+## Version 1.3 experience refinement
+
+- Replaced the abstract field-kit collage with the supplied physical Lagos
+  City Guide and tightened the supporting copy into a compact product module.
+- Added a four-image hero gallery with explicit previous, next and position
+  controls. It is manual by design, supports touch swipe and keyboard arrows,
+  and never moves content without the visitor asking it to.
+- Rebuilt the closing CTA as a swipeable story rail using five supplied
+  lifestyle images. The rail uses native overflow and scroll snap, retaining
+  touch momentum and keyboard-safe controls.
+- Added progressive, reduced-motion-aware section reveals to soften the page
+  rhythm without delaying access to controls or hiding content when JavaScript
+  support is unavailable.
 
 ## Deliberate prototype constraints
 

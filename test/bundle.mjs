@@ -18,7 +18,8 @@ data['assets/logo.svg'] = logo;
 /* --- CSS ------------------------------------------------------------------ */
 let css = '';
 for (const m of html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)) {
-  css += '\n/* ===== ' + m[1] + ' ===== */\n' + readFileSync(join(ROOT, m[1]), 'utf8');
+  const file = m[1].split('?')[0];
+  css += '\n/* ===== ' + file + ' ===== */\n' + readFileSync(join(ROOT, file), 'utf8');
 }
 html = html.replace(/<link rel="stylesheet" href="[^"]+">\n?/g, '');
 html = html.replace('</head>', () => '<style>' + css + '</style>\n</head>');  // function form: $$ in content is literal
@@ -26,7 +27,8 @@ html = html.replace('</head>', () => '<style>' + css + '</style>\n</head>');  //
 /* --- JS ------------------------------------------------------------------- */
 let js = '';
 for (const m of html.matchAll(/<script src="([^"]+)"><\/script>/g)) {
-  js += '\n/* ===== ' + m[1] + ' ===== */\n' + readFileSync(join(ROOT, m[1]), 'utf8');
+  const file = m[1].split('?')[0];
+  js += '\n/* ===== ' + file + ' ===== */\n' + readFileSync(join(ROOT, file), 'utf8');
 }
 html = html.replace(/<script src="[^"]+"><\/script>\n?/g, '');
 html = html.replace('</body>', () => '<script>' + js + '<\/script>\n</body>');  // function form: $$ in content is literal

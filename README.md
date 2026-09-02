@@ -1,6 +1,6 @@
 # NaijaGo — working prototype and design handoff
 
-Version 1.2 · 2 September 2026
+Version 1.3 · 2 September 2026
 
 A complete, clickable frontend of NaijaGo: every screen, every state, every
 flow. No backend, no database, no persistence. Built on the real design from
@@ -13,6 +13,10 @@ booking, passes, account and partner surfaces, plus the UI fixes documented in
 
 Version 1.2 rebuilds the homepage field-kit composition with proportionate
 landscape imagery, a layered pass card and dedicated responsive layouts.
+
+Version 1.3 introduces the physical Lagos City Guide, a manually controlled
+hero gallery, a swipeable story-led closing section and progressive section
+reveals. All motion respects reduced-motion preferences.
 
 ---
 

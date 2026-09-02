@@ -2,23 +2,31 @@
 
 ## What is in `assets/img/`
 
-Twelve photographs, roughly 720KB in total, generated with an AI image model
-for this prototype:
+Twenty-two photographs and product mockups are included in the prototype.
+The original twelve are:
 
 `beach-rave` `boats` `brunch` `december-crowd` `fabric` `gallery` `host`
 `jazz` `lagos-water` `rooftop` `suya` `tarkwa`
+
+The ten supplied campaign assets added in version 1.3 are:
+
+`field-guide-book` `hero-skyline-night` `hero-brunch` `hero-waterfront`
+`hero-nightlife` `story-heritage` `story-new-yam` `story-gallery`
+`story-food-market` `story-lagoon`
 
 They exist so the layout can be reviewed with real photographic weight rather
 than grey boxes. They are the right subjects, aspect ratios and tonal range for
 the slots they fill.
 
-## None of them may ship
+## Production rights
 
-They are generated images of Nigerian places and people that do not exist.
-Publishing them as if they depict the actual venues, hosts and experiences on
-the platform would misrepresent what a buyer is paying for.
+These images are approved for the current prototype and visual direction. The
+production team must still record their final usage rights and must not present
+them as documentary photographs of a specific paid host or venue unless that
+relationship is genuine.
 
-Every one has to be replaced before launch with:
+Before a commercial launch, every experience-specific image must either be
+cleared for production or replaced with:
 
 - **Host-supplied photography** of the actual venue and experience, which is
   also the right answer commercially — a host's own photographs convert better
@@ -27,22 +35,23 @@ Every one has to be replaced before launch with:
 - **Licensed stock**, with the licence recorded; or
 - **Commissioned photography**.
 
-## The live site's own images
+## Asset routing
 
-The production page carries 18 images served from `naijago.netlify.app`.
-Those, not these, are the real ones. When you drop the site's asset folder into
-`assets/img/` under the same filenames, the prototype picks them up with no
-code change — every reference goes through `NG.img()` in `js/util.js`.
+Every local image reference goes through `NG.img()` in `js/util.js`, so a CDN
+or licensed library can replace the source without touching the view templates.
+The Lagos field-guide mockup can remain wherever its brand artwork has final
+approval.
 
 ## Requirements for replacements
 
 | Slot | Ratio | Notes |
 |---|---|---|
-| Hero | wide, ~16:9 | Sits behind a left-to-right scrim; keep the subject right of centre. |
+| Hero | portrait source in a wide right-hand crop | Manual four-image gallery behind a left-to-right scrim; keep faces near centre. |
 | Season card | portrait, ~3:4 | Bottom third is covered by a `rgba(10,10,9,.9)` gradient carrying the title. |
 | Experience card | 4:3 | A corner tag sits top-left and a badge bottom-left. Keep both corners quiet. |
 | Guide featured | ~4:5 | Same bottom scrim as the season card. |
-| Field-kit tile | ~1:1 | A full-width caption bar sits along the bottom edge. |
+| Field-kit book | portrait source in a 4:3 crop | Keep the book cover legible; the lower scrim carries a short caption. |
+| Story rail | portrait, ~4:5 | Bottom scrim carries the experience label and title. |
 | Detail hero | wide | Title and meta sit bottom-left over a heavy scrim. |
 
 Every image that carries text has a gradient overlay reaching

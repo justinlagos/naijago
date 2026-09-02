@@ -64,7 +64,42 @@
     NG.$('#mobile-menu').dataset.open = 'false';
     NG.$('#menu-btn').setAttribute('aria-expanded', 'false');
     window.scrollTo(0, 0);
+    NG.observeSections();
+    NG.bindEditorialControls();
     if (NG.auditOn) NG.audit();
+  };
+
+  NG.observeSections = function () {
+    if (NG.sectionObserver) NG.sectionObserver.disconnect();
+    if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var sections = NG.$$('#main > section:not(.hero)');
+    sections.forEach(function (section) { section.classList.add('reveal-section'); });
+    NG.sectionObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        NG.sectionObserver.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+    sections.forEach(function (section) { NG.sectionObserver.observe(section); });
+  };
+
+  NG.bindEditorialControls = function () {
+    NG.$$('[data-hero-move]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        NG.setHeroSlide(NG.heroIndex + Number(button.dataset.heroMove));
+      });
+    });
+    NG.$$('[data-hero-dot]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        NG.setHeroSlide(Number(button.dataset.heroDot));
+      });
+    });
+    NG.$$('[data-story-move]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        NG.moveStoryRail(Number(button.dataset.storyMove));
+      });
+    });
   };
 
   /* ---- Hold timer ------------------------------------------------------- */
@@ -281,6 +316,17 @@
     }
   });
 
+  var heroSwipeStart = null;
+  document.addEventListener('pointerdown', function (ev) {
+    if (ev.target.closest('#hero-carousel') && !ev.target.closest('button')) heroSwipeStart = ev.clientX;
+  });
+  document.addEventListener('pointerup', function (ev) {
+    if (heroSwipeStart === null) return;
+    var distance = ev.clientX - heroSwipeStart;
+    heroSwipeStart = null;
+    if (Math.abs(distance) > 52) NG.setHeroSlide(NG.heroIndex + (distance < 0 ? 1 : -1));
+  });
+
   /* ---- Change / submit --------------------------------------------------- */
   document.addEventListener('change', function (ev) {
     var t = ev.target;
@@ -340,6 +386,10 @@
 
   document.addEventListener('keydown', function (ev) {
     if (ev.key === 'Escape') NG.closeDialog();
+    if (document.activeElement && document.activeElement.id === 'hero-carousel') {
+      if (ev.key === 'ArrowLeft') { ev.preventDefault(); NG.setHeroSlide(NG.heroIndex - 1); }
+      if (ev.key === 'ArrowRight') { ev.preventDefault(); NG.setHeroSlide(NG.heroIndex + 1); }
+    }
     if (ev.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) {
       ev.preventDefault(); NG.openDialog('search-dialog');
     }

@@ -48,6 +48,9 @@ ok('ticker duplicated', (await page.$$('.announcement-item')).length === 10);
 ok('logo is the real svg', (await page.getAttribute('.brand-logo','src')) === 'assets/logo.svg');
 ok('nav links', (await page.$$eval('.nav-links a', a=>a.map(x=>x.textContent.trim()).join('|'))) === 'Discover|Events|Festivals|Vendors|Guides');
 ok('finder has 3 selects + submit', (await page.$$('.finder select')).length === 3 && !!(await page.$('.finder-submit')));
+ok('4 manually controlled hero moments', (await page.$$('.hero-slide')).length === 4 && (await page.$$('.hero-dots button')).length === 4);
+await page.click('[data-hero-move="1"]');
+ok('hero gallery advances accessibly', (await page.textContent('#hero-label')).includes('Long-table brunch'));
 ok('9 main sections', (await page.$$('main > section')).length === 9);
 ok('3 seasons', (await page.$$('.season-card')).length === 3);
 ok('Detty December foot', body.includes('96 EXPERIENCES · FROM ₦35,000'));
@@ -60,10 +63,11 @@ ok('vibe counts sum to 184', (await page.$$eval('.vibe .data', n=>n.map(x=>parse
 ok('trust 98.4%', (await page.textContent('.trust-grid')).includes('98.4%'));
 ok('3 guides', (await page.$$('.guide-card')).length === 3);
 ok('field kit heading', body.includes('Plan less.') && body.includes('Walk in ready.'));
-ok('field kit image hierarchy', (await page.$$('.kit-tile-main')).length === 1 && (await page.$$('.kit-tile-pass')).length === 1);
+ok('field kit book module', (await page.$$('.kit-book')).length === 1 && (await page.textContent('.kit-book-detail')).includes('Inside the guide'));
 ok('3 hosts named', ['Eko Wave Collective','Naija Food Trails','Terra Culture House'].every(n=>body.includes(n)));
 ok('cta heading', body.includes('Your next story is already happening.'));
-ok('footer legal', body.includes('© 2026 NaijaGo Ltd · Lagos') && body.includes('Naira prices · NDPR minded'));
+ok('5 swipeable story moments', (await page.$$('.story-card')).length === 5 && !!(await page.$('#story-rail')));
+ok('footer legal and production credit', body.includes('© 2026 NaijaGo Ltd · Lagos') && body.includes('Naira prices · NDPR minded') && body.includes('Powered by Ionec'));
 
 /* ---------- 2. Search dialog ---------- */
 await page.click('#search-btn');

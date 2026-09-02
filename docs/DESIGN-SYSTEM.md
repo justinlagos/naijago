@@ -127,7 +127,7 @@ system are avatars, the hero pulse and notification dots.
 - `--shadow` `0 24px 60px rgba(10,10,9,.13)`
 - `--shadow-sm` `0 4px 16px rgba(10,10,9,.08)`
 - `--shadow-lg` `0 40px 90px rgba(10,10,9,.28)`
-- `.section` 100px vertical · `.section-tight` 76px · `.cta` 90px
+- `.section` 100px vertical · `.section-tight` 76px · `.field-kit` 78px / 84px
 
 ---
 
@@ -139,14 +139,16 @@ system are avatars, the hero pulse and notification dots.
 | `.site-header` | Sticky, `rgba(244,244,239,.94)` + `blur(18px)`, 82px nav, 54px logo. |
 | `.nav-links a::after` | Gold 2px underline animating `right: 100% → 0` over 280ms. |
 | `.finder` | `1fr 1fr 1.1fr auto`, `min(980px,100%)`, white, `--shadow`, 60px gold submit. |
+| `.hero-media` | Four-image manual gallery; crossfade only after user input, with swipe, arrow-key and explicit button control. |
 | `.season-card` | 430px min, image at `z-index:-2`, gradient scrim at `-1`, gold tag, 24px gold arrow. |
 | `.experience-card` | 4:3 media, corner vibe tag, gold badge bottom-left, 46px save button top-right, top-bordered foot with rating and price. Hover `translateY(-5px)`. |
 | `.brand-icon` | Inline 24×24 geometric SVG. Primary paths inherit `currentColor`; `.icon-accent` uses `--gold-500`. |
 | `.vibe` | Bordered cell on ink, white-and-gold brand icon, count in `--gold-on-ink`. |
 | `.trust-grid` | `1.1fr 1fr 1fr`; lead cell solid gold with ink text. |
 | `.guide-grid` | `1.25fr 1fr`; featured card spans two rows over an image. |
-| `.field-kit` | Sand editorial band, `.76fr 1.24fr`; a landscape lead image anchors a layered pass card, then becomes a controlled image-first stack under 1100. |
+| `.field-kit` | Compact sand editorial band, `.88fr 1.12fr`; the physical guide is the product image with a concise contents card. |
 | `.host-strip` | `1.15fr repeat(3,1fr)`, 48px ink/gold avatar, teal verified chip. |
+| `.story-rail` | Native horizontal overflow with scroll snap, manual arrow controls and portrait story cards; no autoplay. |
 | `.hold` | Clock + bar + note; `data-warn="true"` at 3 minutes turns the whole strip amber. |
 | `.pass` | Ink card, dashed head rule, white code panel, state stamp, coloured status bar per state. |
 | `.toast` | Fixed bottom-centre, ink, gold uppercase label, slides on `transform`. |
@@ -192,13 +194,13 @@ Two breakpoints, matching production.
 
 **1100px** — nav links and "List an event" hidden, menu button and mobile dock
 shown, experience grid → 2 columns, vibe grid → 3, trust and guide grids → 1,
-field kit → 1 column with the gallery first, sidebars unstick, dialogs stack.
+field kit → 1 column with the book first, sidebars unstick, dialogs stack.
 
 **760px** — nav 68px, logo 45px, hero h1 49px / `-2.5px`, finder → 2 columns
 with a full-width submit, and the season and experience grids become horizontal
 scroll-snap carousels at 84vw / 82vw.
 
-**440px** — hero h1 40px, section h2 32px, CTA h2 40px.
+**440px** — hero h1 40px, section h2 32px, story cards 82vw.
 
 **Touch targets.** Under `(pointer: coarse), (max-width: 760px)` every
 interactive element gets a 44px floor. This block is the **last** thing in

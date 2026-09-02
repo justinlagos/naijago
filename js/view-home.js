@@ -14,13 +14,70 @@
     }).join('');
   }
 
+  var HERO_MOMENTS = [
+    { image: 'hero-skyline-night.jpg', label: 'After-dark Lagos', position: 'center 46%' },
+    { image: 'hero-brunch.jpg', label: 'Long-table brunch', position: 'center 45%' },
+    { image: 'hero-waterfront.jpg', label: 'By the water', position: 'center 46%' },
+    { image: 'hero-nightlife.jpg', label: 'A proper night out', position: 'center 42%' }
+  ];
+
+  var STORY_MOMENTS = [
+    { image: 'story-heritage.jpg', title: 'Dress for the culture', meta: 'Heritage · Lagos' },
+    { image: 'story-new-yam.jpg', title: 'Come home for the festival', meta: 'New Yam · South East' },
+    { image: 'story-gallery.jpg', title: 'Find the room everyone remembers', meta: 'Art & culture · Lagos' },
+    { image: 'story-food-market.jpg', title: 'Taste the city properly', meta: 'Food trail · Mainland' },
+    { image: 'story-lagoon.jpg', title: 'Take the long way back', meta: 'Lagoon day · Lagos' }
+  ];
+
+  NG.heroIndex = NG.heroIndex || 0;
+  NG.setHeroSlide = function (next) {
+    var slides = NG.$$('[data-hero-slide]');
+    if (!slides.length) return;
+    NG.heroIndex = (next + slides.length) % slides.length;
+    slides.forEach(function (slide, i) {
+      var active = i === NG.heroIndex;
+      slide.dataset.active = String(active);
+      slide.setAttribute('aria-hidden', String(!active));
+    });
+    NG.$$('[data-hero-dot]').forEach(function (dot, i) {
+      dot.setAttribute('aria-pressed', String(i === NG.heroIndex));
+    });
+    var count = NG.$('#hero-count');
+    var label = NG.$('#hero-label');
+    if (count) count.textContent = String(NG.heroIndex + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    if (label) label.textContent = HERO_MOMENTS[NG.heroIndex].label;
+  };
+
+  NG.moveStoryRail = function (direction) {
+    var rail = NG.$('#story-rail');
+    if (!rail) return;
+    var card = rail.querySelector('.story-card');
+    var distance = card ? card.getBoundingClientRect().width + 16 : rail.clientWidth * .7;
+    rail.scrollBy({ left: direction * distance, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  };
+
   NG.views.home = function () {
     var S = NG.STATS;
 
     /* ---- Hero ---------------------------------------------------------- */
     var hero = '' +
     '<section class="hero" id="top">' +
-      '<div class="hero-media" style="background-image:url(' + img('lagos-water.jpg') + ')" role="presentation"></div>' +
+      '<div class="hero-media" id="hero-carousel" tabindex="0" aria-label="Lagos experience gallery. Use left and right arrow keys to browse.">' +
+        HERO_MOMENTS.map(function (moment, i) {
+          var active = i === NG.heroIndex;
+          return '<div class="hero-slide" data-hero-slide="' + i + '" data-active="' + active + '" aria-hidden="' + (!active) + '" style="background-image:url(' + img(moment.image) + ');background-position:' + moment.position + '"></div>';
+        }).join('') +
+        '<div class="hero-gallery-controls">' +
+          '<div class="hero-gallery-copy"><span id="hero-count">' + String(NG.heroIndex + 1).padStart(2, '0') + ' / ' + String(HERO_MOMENTS.length).padStart(2, '0') + '</span><strong id="hero-label" aria-live="polite">' + esc(HERO_MOMENTS[NG.heroIndex].label) + '</strong></div>' +
+          '<div class="hero-gallery-actions">' +
+            '<button type="button" data-hero-move="-1" aria-label="Previous image">←</button>' +
+            '<button type="button" data-hero-move="1" aria-label="Next image">→</button>' +
+          '</div>' +
+          '<div class="hero-dots" aria-label="Choose gallery image">' + HERO_MOMENTS.map(function (moment, i) {
+            return '<button type="button" data-hero-dot="' + i + '" aria-label="Show ' + esc(moment.label) + '" aria-pressed="' + (i === NG.heroIndex) + '"></button>';
+          }).join('') + '</div>' +
+        '</div>' +
+      '</div>' +
       '<div class="wrap">' +
         '<p class="hero-eyebrow"><span class="pulse" aria-hidden="true"></span>' + esc(S.experiences) + ' experiences live this season</p>' +
         '<h1>Nigeria is happening.<br><em>Go experience it.</em></h1>' +
@@ -152,22 +209,19 @@
         '<div class="kit-copy">' +
           '<span class="eyebrow">The NaijaGo field kit</span>' +
           '<h2>Plan less.<br>Walk in ready.</h2>' +
-          '<p>The useful details stay with you after you leave the app: a city guide shaped by locals and an entry pass designed for a quick, confident arrival.</p>' +
+          '<p>Your booking is only the beginning. Keep the places, timings and local context you will actually need in one Lagos guide.</p>' +
           '<ul class="kit-list">' +
-            '<li><b aria-hidden="true">' + NG.icon('guide') + '</b><span>Local recommendations, arranged by mood</span></li>' +
-            '<li><b aria-hidden="true">' + NG.icon('location') + '</b><span>Clear arrival notes and neighbourhood context</span></li>' +
-            '<li><b aria-hidden="true">' + NG.icon('ticket') + '</b><span>Fast entry even when the network is busy</span></li>' +
+            '<li><b aria-hidden="true">' + NG.icon('guide') + '</b><span>Neighbourhood picks, arranged by mood</span></li>' +
+            '<li><b aria-hidden="true">' + NG.icon('location') + '</b><span>When to go, what to expect and how to arrive</span></li>' +
+            '<li><b aria-hidden="true">' + NG.icon('ticket') + '</b><span>Your saved plan and entry pass, available offline</span></li>' +
           '</ul>' +
-          '<a class="kit-link" href="#/guide/three-moods">Preview the Lagos guide →</a>' +
+          '<a class="kit-link" href="#/guide/three-moods">Open the Lagos guide →</a>' +
         '</div>' +
         '<div class="kit-gallery">' +
-          '<span class="kit-index" aria-hidden="true">01 · Lagos field notes</span>' +
-          '<figure class="kit-tile kit-tile-main" style="background-image:url(' + img('lagos-water.jpg') + ')">' +
-            '<figcaption><span>Lagos guide</span><strong>Move through the city like you know it.</strong></figcaption>' +
+          '<figure class="kit-book" style="background-image:url(' + img('field-guide-book.jpg') + ')">' +
+            '<figcaption><span>Lagos edition · included with eligible bookings</span><strong>The useful version of Lagos, kept close.</strong></figcaption>' +
           '</figure>' +
-          '<figure class="kit-tile kit-tile-pass" style="background-image:url(' + img('beach-rave.jpg') + ')">' +
-            '<figcaption><span>Your NaijaGo pass</span><strong>Saved. Offline. Ready at the gate.</strong></figcaption>' +
-          '</figure>' +
+          '<div class="kit-book-detail"><span class="eyebrow">Inside the guide</span><strong>Food. Culture. Nights. Stays.</strong><p>Local notes that stay useful after the booking screen closes.</p></div>' +
         '</div>' +
       '</div></div>' +
     '</section>';
@@ -188,11 +242,22 @@
 
     /* ---- CTA ------------------------------------------------------------ */
     var cta = '' +
-    '<section class="cta">' +
-      '<div class="wrap">' +
-        '<h2>Your next story is already happening.</h2>' +
-        '<p>Tell us your city, dates and kind of vibe. We will turn it into a weekend worth leaving the house for.</p>' +
-        '<a class="btn btn-lg" href="#/plan">Plan my weekend <span aria-hidden="true">→</span></a>' +
+    '<section class="story-cta">' +
+      '<div class="story-cta-shell">' +
+        '<div class="story-cta-copy">' +
+          '<span class="eyebrow">Start with a feeling</span>' +
+          '<h2>Your next story is already happening.</h2>' +
+          '<p>Pick the kind of day you want. We will help with the place, timing and people who make it worth going.</p>' +
+          '<a class="btn btn-lg" href="#/plan">Plan my weekend <span aria-hidden="true">→</span></a>' +
+          '<div class="story-controls"><span>Swipe the moments</span><div><button type="button" data-story-move="-1" aria-label="Previous moments">←</button><button type="button" data-story-move="1" aria-label="Next moments">→</button></div></div>' +
+        '</div>' +
+        '<div class="story-rail" id="story-rail" role="region" aria-label="Nigerian experience moments">' +
+          STORY_MOMENTS.map(function (moment, i) {
+            return '<figure class="story-card" role="group" aria-label="' + (i + 1) + ' of ' + STORY_MOMENTS.length + ': ' + esc(moment.title) + '" style="background-image:url(' + img(moment.image) + ')">' +
+              '<figcaption><span>' + esc(moment.meta) + '</span><strong>' + esc(moment.title) + '</strong></figcaption>' +
+            '</figure>';
+          }).join('') +
+        '</div>' +
       '</div>' +
     '</section>';
 
