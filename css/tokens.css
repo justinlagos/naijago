@@ -1,0 +1,74 @@
+/* ==========================================================================
+   NaijaGo — design tokens
+   Reconstructed from the production build at naijago.netlify.app, with the
+   one documented correction: --neutral-600 is added and every piece of meta
+   text moves onto it. Production ships --neutral-500 (#9A9A90) at 2.57:1.
+   ========================================================================== */
+
+:root {
+  /* ---- Brand gold ------------------------------------------------------ */
+  --gold-100: #F5E6C8;
+  --gold-200: #E9CE95;
+  --gold-300: #D9A44A;   /* button hover */
+  --gold-400: #CC9130;
+  --gold-500: #BF8422;   /* brand */
+  --gold-600: #845914;   /* gold text on light grounds — 5.57:1 parchment, 6.14:1 white, 4.76:1 sand */
+  --gold-700: #6F4D13;
+  --gold-on-ink: #E3BC6C; /* gold-toned data on ink grounds */
+
+  /* ---- Ink ------------------------------------------------------------- */
+  --ink-900: #0A0A09;
+  --ink-800: #16150F;
+  --ink-700: #2A2A23;
+  --ink-600: #3D3D33;
+
+  /* ---- Parchment / neutrals ------------------------------------------- */
+  --white:     #FFFFFF;
+  --parchment: #F4F4EF;
+  --sand:      #E7E2D8;
+  --sand-deep: #D7D0C4;
+  --n-100: #EDECE5;
+  --n-200: #DCDBD2;
+  --n-300: #C5C4B9;
+  --n-400: #A8A79B;
+  --n-500: #9A9A90;   /* decorative + placeholder ONLY. 2.57:1. Never body text. */
+  --n-600: #646459;   /* meta text. 5.42:1 parchment, 5.98:1 white, 4.64:1 sand. */
+  --n-700: #55554D;
+  --footer-text: #C7C6BB;
+
+  /* ---- Verified / settled (never an "on" colour) ----------------------- */
+  --ok-bg:  #E6F5EF;
+  --ok-ink: #12604C;   /* 7.0:1 on --ok-bg, 6.2:1 on white */
+
+  /* ---- Alert / failure ------------------------------------------------- */
+  --warn-bg:  #FDF0DC;
+  --warn-ink: #8A5304;
+  --stop-bg:  #FCEBE8;
+  --stop-ink: #A32A16;
+
+  /* ---- Vibe chips (white text; all ≥ 6:1) ------------------------------ */
+  --vibe-night:    #2B2A4A;
+  --vibe-food:     #7A2E1B;
+  --vibe-festival: #6B2148;
+  --vibe-culture:  #1F4A45;
+  --vibe-outdoors: #2F4A22;
+  --vibe-stay:     #3C3357;
+
+  /* ---- Type ------------------------------------------------------------ */
+  --font-ui: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+
+  /* ---- Elevation ------------------------------------------------------- */
+  --shadow:    0 24px 60px rgba(10,10,9,.13);
+  --shadow-sm: 0 4px 16px rgba(10,10,9,.08);
+  --shadow-lg: 0 40px 90px rgba(10,10,9,.28);
+
+  /* ---- Geometry -------------------------------------------------------- */
+  --radius: 0px;          /* the brand is square-cornered */
+  --radius-pill: 999px;
+  --gutter: 40px;
+  --max: 1320px;
+  --nav-h: 82px;
+  --ann-h: 34px;
+}

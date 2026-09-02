@@ -1,0 +1,155 @@
+/* ==========================================================================
+   NaijaGo — responsive layers. Loaded LAST so these rules win the cascade.
+   Breakpoints match production: 1100px and 760px.
+   ========================================================================== */
+
+@media (max-width:1240px){
+  :root{--gutter:28px}
+  .explore-results{grid-template-columns:repeat(2,1fr)}
+  .detail-grid,.checkout-grid{grid-template-columns:1fr 330px;gap:28px}
+}
+
+@media (max-width:1100px){
+  .nav-links{display:none}
+  .menu-btn{display:inline-flex}
+  .nav-action{display:none}
+  .mobile-dock{display:block}
+  body{padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+  .toast{bottom:calc(76px + env(safe-area-inset-bottom))}
+
+  .hero{min-height:auto;display:block}
+  .hero-media{width:100%;opacity:.5}
+  .hero-media::after{background:linear-gradient(0deg,var(--ink-900) 12%,rgba(10,10,9,.6) 70%)}
+  .hero .wrap{padding-bottom:32px}
+  .floating-plan{
+    position:static;right:auto;bottom:auto;
+    width:min(var(--max),100% - (var(--gutter) * 2));margin:0 auto 56px;
+  }
+
+  .season-grid{grid-template-columns:1fr 1fr}
+  .season-card:first-child{grid-column:span 2}
+  .experience-grid{grid-template-columns:repeat(2,1fr)}
+  .vibe-grid{grid-template-columns:repeat(3,1fr)}
+  .trust-grid{grid-template-columns:1fr}
+  .guide-grid{grid-template-columns:1fr}
+  .guide-card.featured{grid-row:auto}
+  .field-kit-grid{grid-template-columns:1fr}
+  .kit-gallery{order:-1}
+  .kit-copy{padding:56px 0}
+  .host-strip{grid-template-columns:1fr 1fr}
+  .host-lead{grid-column:span 2}
+
+  .explore-grid{grid-template-columns:1fr}
+  .facets{position:static}
+  .detail-grid,.checkout-grid,.account-grid{grid-template-columns:1fr}
+  .booking-box,.side-nav{position:static}
+  .side-nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+  .side-nav a{border-left:0;border-bottom:3px solid transparent;white-space:nowrap}
+  .side-nav a[aria-current="page"]{border-left:0;border-bottom-color:var(--gold-500)}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-strip{grid-template-columns:repeat(2,1fr)}
+  .event-hero,.event-lower{grid-template-columns:1fr}
+  .facts{border-left:0;border-top:1px solid var(--n-200)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .footer-brand{grid-column:span 2}
+}
+
+@media (max-width:760px){
+  :root{--gutter:20px;--nav-h:68px}
+  .brand-logo{width:45px;height:45px}
+  .nav{gap:16px}
+  .location{display:none}
+  .section{padding:64px 0}
+  .section-tight{padding:52px 0}
+  .section-head{flex-direction:column;align-items:flex-start;gap:14px}
+
+  .hero .wrap{padding:56px 0 64px}
+  .hero h1{font-size:49px;letter-spacing:-2.5px}
+  .hero-sub{font-size:16px}
+  .finder{grid-template-columns:1fr 1fr}
+  .finder-field:nth-child(3){grid-column:span 2;border-right:0;border-top:1px solid var(--n-200)}
+  .finder-field:nth-child(2){border-right:0}
+  .finder-submit{grid-column:span 2;justify-content:center;border-top:1px solid var(--n-200)}
+  .finder-field{padding:14px 16px;min-width:0}
+  .finder-field select{font-size:15px;text-overflow:ellipsis}
+  .hero-stats{gap:24px}
+
+  /* Horizontal scroll-snap carousels, as production */
+  .season-grid,.experience-grid{
+    display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+    margin-inline:calc(var(--gutter) * -1);padding-inline:var(--gutter);
+    scrollbar-width:none;
+  }
+  .season-grid::-webkit-scrollbar,.experience-grid::-webkit-scrollbar{display:none}
+  .season-card{flex:0 0 84vw;scroll-snap-align:start;min-height:380px}
+  .season-card:first-child{grid-column:auto}
+  .experience-card{flex:0 0 82vw;scroll-snap-align:start}
+
+  .vibe-grid{grid-template-columns:repeat(2,1fr)}
+  .host-strip{grid-template-columns:1fr}
+  .host-lead{grid-column:auto}
+  .cta{padding:64px 0}
+  .explore-results,.grid-2,.grid-3{grid-template-columns:1fr}
+  .kpi-grid,.stat-strip{grid-template-columns:1fr 1fr}
+  .quick-search{grid-template-columns:1fr}
+  .shortcuts{grid-template-columns:1fr}
+  .dialog-head,.dialog-body,.event-summary,.event-plan,.facts{padding-inline:22px}
+  .event-summary h2{font-size:32px;letter-spacing:-1.2px}
+  .booking-row{grid-template-columns:1fr;gap:12px}
+  .booking-thumb{width:100%;height:150px}
+  .steps{flex-direction:column}
+  .steps li{border-right:0;border-bottom:1px solid var(--n-200)}
+  .steps li:last-child{border-bottom:0}
+  .hold{flex-wrap:wrap}
+  .hold-note{flex-basis:100%}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-brand{grid-column:auto}
+  .cal{grid-template-columns:1fr}
+  .cal-h{display:none}
+  .cal-d{min-height:auto}
+  .cal-d.out{display:none}
+  table.data{display:block;overflow-x:auto;white-space:nowrap}
+  .bars{height:130px}
+}
+
+@media (max-width:440px){
+  .hero h1{font-size:40px;letter-spacing:-1.9px}
+  .section-head h2{font-size:32px;letter-spacing:-1.4px}
+  .cta h2{font-size:40px;letter-spacing:-2px}
+  .kit-copy h2{font-size:38px;letter-spacing:-1.8px}
+}
+
+/* ==========================================================================
+   Touch targets. Coarse pointers get a 44px floor on every interactive
+   element. This block is last on purpose — it must beat every earlier rule.
+   ========================================================================== */
+@media (pointer:coarse),(max-width:760px){
+  button,
+  a.btn,
+  .btn,
+  .chip,
+  .tab,
+  .icon-btn,
+  .account,
+  .save-button,
+  .location,
+  .nav-action,
+  .copy-btn,
+  .qty button,
+  .stars button,
+  .view-switch button,
+  .dialog-x,
+  .mobile-dock button,
+  .shortcut,
+  input[type="checkbox"] + span,
+  select,
+  .field input,
+  .field select,
+  .field textarea{
+    min-height:44px !important;
+  }
+  .icon-btn,.account,.save-button,.qty button,.stars button,.dialog-x{min-width:44px !important}
+  .facet label{min-height:44px !important}
+  .finder-field select{min-height:44px !important}
+  .sort select{min-height:44px !important}
+}

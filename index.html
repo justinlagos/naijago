@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NaijaGo — Find your next Nigerian experience</title>
+<meta name="description" content="Discover, book and remember Nigeria's best real-world experiences. Verified hosts, fees shown upfront, passes that scan offline.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Announcement ticker ------------------------------------------------- -->
+<div class="announcement" aria-label="NaijaGo highlights">
+  <div class="announcement-track" id="ticker"></div>
+</div>
+
+<!-- Header --------------------------------------------------------------- -->
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="#/" aria-label="NaijaGo home">
+      <img class="brand-logo" src="assets/logo.svg" alt="NaijaGo" width="54" height="54">
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#/explore" data-nav="discover">Discover</a>
+      <a href="#/explore?mode=events" data-nav="events">Events</a>
+      <a href="#/seasons">Festivals</a>
+      <a href="#/hosts">Vendors</a>
+      <a href="#/guides">Guides</a>
+    </nav>
+    <div class="nav-spacer"></div>
+    <div class="nav-tools">
+      <button class="location" type="button" data-open-dialog="search-dialog" aria-label="Change city and search">
+        <span class="location-symbol" aria-hidden="true"></span><span id="city-label">Lagos</span><span class="location-chevron" aria-hidden="true"></span>
+      </button>
+      <button class="icon-btn" type="button" data-open-dialog="search-dialog" aria-label="Search experiences" id="search-btn"></button>
+      <button class="nav-action" type="button" data-go="#/partner">List an event</button>
+      <button class="account" type="button" id="account-btn" aria-label="Sign in" data-go="#/account"></button>
+      <button class="icon-btn menu-btn" type="button" id="menu-btn" aria-label="Open menu" aria-expanded="false"></button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" data-open="false">
+  <a href="#/explore">Discover</a>
+  <a href="#/explore?mode=events">Events</a>
+  <a href="#/seasons">Festivals</a>
+  <a href="#/hosts">Verified vendors</a>
+  <a href="#/guides">City guides</a>
+  <a href="#/partner">List an event</a>
+  <a href="#/account">Your account</a>
+</nav>
+
+<main id="main"></main>
+
+<!-- Footer --------------------------------------------------------------- -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>NaijaGo</h3>
+        <p>The trusted way to discover, book and remember Nigeria's best real-world experiences.</p>
+      </div>
+      <div>
+        <p class="footer-title">Discover</p>
+        <ul>
+          <li><a href="#/explore">All experiences</a></li>
+          <li><a href="#/seasons">Seasons</a></li>
+          <li><a href="#/guides">Guides</a></li>
+          <li><a href="#/explore">Cities</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">For partners</p>
+        <ul>
+          <li><a href="#/partner">List an event</a></li>
+          <li><a href="#/partner">Sell tickets</a></li>
+          <li><a href="#/partner">Partnerships</a></li>
+          <li><a href="#/partner">Advertise</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">Support</p>
+        <ul>
+          <li><a href="#/account/bookings">My bookings</a></li>
+          <li><a href="#/help">Help centre</a></li>
+          <li><a href="#/help">Privacy</a></li>
+          <li><a href="#/help">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>© 2026 NaijaGo Ltd · Lagos</span>
+      <span>Naira prices · NDPR minded</span>
+    </div>
+  </div>
+</footer>
+
+<nav class="mobile-dock" aria-label="Mobile navigation">
+  <ul>
+    <li><button type="button" data-go="#/">Go</button></li>
+    <li><button type="button" data-open-dialog="search-dialog">Search</button></li>
+    <li><button type="button" data-go="#/explore?mode=events" data-nav="events">Events</button></li>
+    <li><button type="button" data-go="#/account/passes">Passes</button></li>
+  </ul>
+</nav>
+
+<!-- Search dialog -------------------------------------------------------- -->
+<div class="scrim search-dialog" id="search-dialog" data-open="false" role="dialog" aria-modal="true" aria-labelledby="search-title">
+  <div class="dialog">
+    <button class="dialog-x" type="button" data-close aria-label="Close search">&times;</button>
+    <div class="dialog-head">
+      <span class="eyebrow">Discover Nigeria</span>
+      <h2 id="search-title">What are you in the mood for?</h2>
+    </div>
+    <div class="dialog-body">
+      <form class="quick-search" id="quick-search">
+        <label class="field"><span>Search</span>
+          <input type="search" name="q" placeholder="Beach, jazz, food, festival…"></label>
+        <label class="field"><span>City</span>
+          <select name="city"><option>Lagos</option><option>Abuja</option><option>Port Harcourt</option></select></label>
+        <label class="field"><span>When</span>
+          <select name="when"><option>This weekend</option><option>Tonight</option><option>Pick dates</option></select></label>
+        <button class="btn btn-primary btn-lg" type="submit" style="margin-bottom:18px">Show experiences</button>
+      </form>
+      <div class="shortcuts" id="shortcuts"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Experience quick-view dialog ----------------------------------------- -->
+<div class="scrim event-dialog center" id="event-dialog" data-open="false" role="dialog" aria-modal="true" aria-labelledby="event-title">
+  <div class="dialog" id="event-dialog-body"></div>
+</div>
+
+<!-- Toast ---------------------------------------------------------------- -->
+<div class="toast" id="toast" role="status" aria-live="polite" data-open="false">
+  <strong>Done</strong><span>Saved to your list</span>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/util.js"></script>
+<script src="js/components.js"></script>
+<script src="js/view-home.js"></script>
+<script src="js/view-discover.js"></script>
+<script src="js/view-book.js"></script>
+<script src="js/view-pass.js"></script>
+<script src="js/view-account.js"></script>
+<script src="js/view-partner.js"></script>
+<script src="js/app.js"></script>
+<script src="js/audit.js"></script>
+</body>
+</html>

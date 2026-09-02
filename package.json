@@ -1,0 +1,15 @@
+{
+  "name": "naijago-prototype",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "bundle": "node test/bundle.mjs",
+    "test": "node test/e2e.mjs",
+    "test:bundle": "node test/bundle-check.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
