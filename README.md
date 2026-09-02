@@ -1,0 +1,124 @@
+# NaijaGo — working prototype and design handoff
+
+Version 1.1 · 2 September 2026
+
+A complete, clickable frontend of NaijaGo: every screen, every state, every
+flow. No backend, no database, no persistence. Built on the real design from
+`naijago.netlify.app` — the actual logo, tokens, layout and copy — with the
+product flows wired into it.
+
+Version 1.1 adds the approved geometric brand-icon family across discovery,
+booking, passes, account and partner surfaces, plus the UI fixes documented in
+`docs/UI-AUDIT.md`.
+
+---
+
+## Open it
+
+**The single file.** `naijago-prototype.html` has everything inlined —
+CSS, JavaScript, images, logo. Double-click it. It works offline, from a USB
+stick, from an email attachment. Nothing to install.
+
+**The source.** The `naijago-app/` folder needs a local server, because the
+browser blocks module and image loading over `file://`:
+
+```
+cd naijago-app
+python3 -m http.server 8000
+```
+
+then open `http://localhost:8000`.
+
+---
+
+## Where to click first
+
+| | |
+|---|---|
+| The whole homepage | `#/` — nine sections, the ticker, the finder |
+| The auth wall doing its job | Tap any heart while signed out. Sign in. You land back where you were, saved. |
+| The money | `#/experience/beach-rave` → set 2 → checkout. ₦30,000 + ₦1,500 = ₦31,500. |
+| The hold timer | Sit on checkout. At three minutes it turns amber. At zero you get the expiry screen. |
+| Payment failures | Three "simulate" buttons on checkout. Read the timeout one. |
+| The pass, all four states | `#/pass/NG-8842-LOS` — chips at the bottom switch states; one toggles offline. |
+| The gate | The two scan buttons on the pass. |
+| The waitlist claim window | `#/waitlist/tarkwa` — join, then let a place open. |
+| A schedule clash | `#/account/plans` |
+| Host-side arithmetic | `#/partner` — ₦3,660,000 gross, ₦292,800 commission, ₦3,367,200 payout |
+| The contrast audit | Press **A** on any screen, or add `?audit`. |
+
+Press **/** anywhere to open search. **Esc** closes any dialog.
+
+---
+
+## What is in the box
+
+```
+naijago-app/
+  index.html            the shell: ticker, header, footer, dock, dialogs, toast
+  css/
+    tokens.css          every colour, type and geometry token
+    base.css            reset, type scale, layout primitives, controls
+    site.css            chrome: ticker, header, menu, dock, footer, dialogs, toast
+    home.css            the nine homepage sections
+    app.css             product screens: explore, detail, checkout, pass, account, partner
+    responsive.css      1100px and 760px breakpoints + the 44px touch-target floor
+  js/
+    data.js             the fixture canon — every number, name and string
+    util.js             in-memory state, helpers, the QR drawing, cart maths
+    components.js       reusable render fragments
+    view-*.js           one file per area of the product
+    app.js              router, hold timer, delegated events
+    audit.js            the WCAG contrast sweep
+  assets/               the real logo.svg + 12 photographs
+  scripts/build.mjs     produces the deploy-safe dist/ folder
+  test/e2e.mjs          Playwright route, flow, accessibility and layout suite
+  docs/
+    DESIGN-SYSTEM.md    tokens, components, states, the colour rules
+    SPEC.md             fixture canon, routes, data model, flows, state matrix
+    IMPLEMENTATION.md   how to turn this into a real build
+    IMAGES.md           what the photographs are and what has to replace them
+naijago-prototype.html  the whole thing in one file
+```
+
+---
+
+## Verification
+
+`npm test` runs the Playwright assertions:
+
+- homepage fidelity — the h1, the three stats, nine sections, eight cards, six
+  vibe counts summing to 184, all three host names, the footer legal line
+- every route renders, including the four failure states and all four pass states
+- the money — ₦30,000 + ₦1,500 = ₦31,500, 315 points, ₦3,367,200 payout
+- the auth wall preserves and replays intent
+- the waitlist lapse sends you to the back of the queue, not the front
+- **zero contrast failures across 32 routes**, measured against composited
+  backgrounds
+- no horizontal overflow at 390, 430, 768 or 1440
+- no interactive element under 44px on mobile
+- no console or page errors
+
+---
+
+## Three things worth knowing
+
+**No card data anywhere.** Not in a form, not in state, not in a comment. The
+card panel says so on screen. In production, card entry belongs in the
+processor's hosted field, never in your own input.
+
+**The QR code is a drawing.** It is deterministic from the reference so it
+looks stable, but it does not encode anything. The screen says so, and the gate
+views read the reference instead.
+
+**Nothing persists.** Reload and you are signed out with an empty saved list.
+That is deliberate: the prototype should never look like it has a backend when
+it does not.
+
+---
+
+## Build and deployment
+
+`npm run build` creates `dist/`, containing only the production HTML, CSS,
+JavaScript and assets. Netlify is configured through `netlify.toml`; test files
+and handoff documentation are kept out of the public deploy.
