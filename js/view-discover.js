@@ -60,8 +60,9 @@
         }).join('') + '</div>';
     }
 
+    var resultCards = results.map(function (e, i) { return NG.experienceCard(e) + (i === 2 ? NG.nativeAdCard() : ''); }).join('');
     var body = results.length
-      ? '<div class="explore-results">' + results.map(NG.experienceCard).join('') + '</div>'
+      ? '<div class="explore-results">' + resultCards + '</div>'
       : '<div class="empty"><h3>Nothing matches all of those</h3>' +
         '<p>Loosen one filter and the list comes back. The counts beside each option tell you which one is doing the damage.</p>' +
         '<p style="margin-top:18px"><button class="btn" type="button" data-clear-filters>Clear all filters</button></p></div>';
@@ -73,11 +74,14 @@
         '<h1>Experiences in ' + esc(NG.state.city) + '</h1>' +
         '<p>' + NG.LAGOS_TOTAL + ' experiences are live in Lagos right now. This prototype ships eight of them with full booking flows.</p>' +
       '</div>' +
+      '<div class="mobile-explore-toolbar"><button class="btn btn-ink" type="button" data-filter-open>' + NG.icon('trending') + 'Filters' + (applied.length ? '<b>' + applied.length + '</b>' : '') + '</button><span>' + results.length + ' shown</span><label class="sort"><span class="sr">Sort results</span><select id="sort-select-mobile"><option>Sort</option><option value="soon">Soonest</option><option value="popular">Popular</option><option value="rating">Rating</option><option value="price">Price</option></select></label></div>' +
       '<div class="explore-grid">' +
-        '<aside class="facets" aria-label="Filters">' +
+        '<div class="filter-scrim" data-filter-close aria-hidden="true"></div><aside class="facets" id="explore-filters" aria-label="Filters" data-open="' + NG.state.filtersOpen + '">' +
+          '<div class="facets-head"><div><span class="eyebrow">Refine the list</span><h2>Filters</h2></div><button type="button" data-filter-close aria-label="Close filters">×</button></div>' +
           facet('Vibe', 'vibes', NG.VIBES, 'trending') +
           facet('Area', 'areas', NG.AREAS, 'location') +
           facet('Price', 'bands', NG.PRICE_BANDS, 'ticket') +
+          '<div class="facets-actions"><button class="btn btn-primary btn-block" type="button" data-filter-close>Show ' + results.length + ' result' + (results.length === 1 ? '' : 's') + '</button><button class="btn btn-quiet btn-block" type="button" data-clear-filters>Clear all</button></div>' +
         '</aside>' +
         '<div>' +
           '<div class="explore-bar">' +
@@ -178,6 +182,7 @@
       '<p>This prototype carries the guide index, the card treatment and the reading layout. The editorial body is out of scope for the design layer — the dev team drops CMS content into this container.</p>' +
       '<div class="notice notice-ok" style="margin-top:26px"><h4>Prototype note</h4>' +
       '<p>Guide bodies come from the CMS. Everything around them — index, cards, header, meta line — is specified here.</p></div>' +
+      '<div style="margin-top:30px">' + NG.adSlot('guide') + '</div>' +
     '</div></div>';
   };
 

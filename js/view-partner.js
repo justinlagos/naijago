@@ -4,7 +4,7 @@
    ========================================================================== */
 (function (NG) {
   'use strict';
-  var esc = NG.esc, money = NG.money;
+  var esc = NG.esc, money = NG.money, img = NG.img;
   NG.views = NG.views || {};
 
   var PTABS = [
@@ -70,6 +70,7 @@
       '<table class="data"><thead><tr>' +
         '<th>Experience</th><th>Date</th><th>Status</th><th class="num">Sold</th><th class="num">Gross</th>' +
       '</tr></thead><tbody>' +
+        (NG.state.listingStatus !== 'draft' ? '<tr><td><a href="#/partner/listing">Your new experience</a></td><td>To be confirmed</td><td><span class="tag tag-warn">In review</span></td><td class="num">—</td><td class="num">—</td></tr>' : '') +
         c.listings.map(function (l) {
           return '<tr><td><a href="#/partner/listing">' + esc(l.name) + '</a></td>' +
             '<td>' + esc(l.date) + '</td>' +
@@ -87,16 +88,20 @@
     return shell('#/partner/listings',
       '<div class="page-head"><span class="crumb"><a href="#/partner/listings">Listings</a> · New</span>' +
       '<h1 style="font-size:34px">Create a listing</h1>' +
-      '<p>Everything a guest sees before they pay. Nothing here goes live until a human reviews it.</p></div>' +
-      '<div class="card card-pad">' +
-        '<label class="field"><span>Title</span><input type="text" placeholder="Lekki Moonlight Beach Rave"></label>' +
+      '<p>Build the useful version once, then check exactly how it will appear before owner review.</p></div>' +
+      '<div class="listing-builder"><form class="card card-pad" id="listing-form">' +
+        '<div class="form-section-head"><span>01</span><div><h2>Event details</h2><p>Write for someone deciding whether to leave home.</p></div></div>' +
+        '<label class="field"><span>Title</span><input id="listing-title" name="title" type="text" required placeholder="Lekki Moonlight Beach Rave"></label>' +
         '<div class="grid-2">' +
-          '<label class="field"><span>Date</span><input type="date"></label>' +
-          '<label class="field"><span>Doors</span><input type="time"></label>' +
+          '<label class="field"><span>Date</span><input id="listing-date" name="date" type="date" required></label>' +
+          '<label class="field"><span>Doors</span><input name="time" type="time" required></label>' +
         '</div>' +
-        '<label class="field"><span>Venue</span><input type="text" placeholder="Where guests actually arrive"></label>' +
+        '<label class="field"><span>Venue</span><input id="listing-venue" name="venue" type="text" required placeholder="Where guests actually arrive"></label>' +
         '<label class="field"><span>Vibe</span><select>' + NG.VIBES.map(function (v) { return '<option>' + esc(v.name) + '</option>'; }).join('') + '</select></label>' +
         '<label class="field"><span>What happens</span><textarea placeholder="The useful version. Timings, what to wear, how long the journey really takes."></textarea></label>' +
+        '<div class="form-section-head"><span>02</span><div><h2>Event flyer</h2><p>Use one strong image with breathing room around important text.</p></div></div>' +
+        '<label class="upload-zone" for="event-flyer-input"><span>' + NG.icon('guide') + '</span><strong>Drop a flyer here or choose a file</strong><small>JPG or PNG · 1600 × 1200 px recommended · 1200 × 900 px minimum · 4:3 · max 10 MB</small><input class="sr" id="event-flyer-input" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png"><em id="flyer-status">Keep logos and dates inside the central safe area.</em></label>' +
+        '<div class="form-section-head"><span>03</span><div><h2>Tickets</h2><p>The customer total and your payout remain visible before submission.</p></div></div>' +
         '<div class="grid-2">' +
           '<label class="field"><span>Tier name</span><input type="text" value="General entry"></label>' +
           '<label class="field"><span>Price (₦)</span><input type="number" value="15000" inputmode="numeric"></label>' +
@@ -104,9 +109,9 @@
         '<label class="field"><span>Capacity</span><input type="number" value="208" inputmode="numeric"></label>' +
         '<div class="notice notice-warn"><h4>What the guest will pay</h4>' +
         '<p>At ₦15,000 face value the guest pays ₦15,750 including the 5% service fee. You receive ₦13,800 per ticket after 8% commission.</p></div>' +
-        '<div class="row" style="margin-top:20px"><button class="btn btn-primary" type="button" data-listing-submit>Submit for review</button>' +
-        '<button class="btn btn-quiet" type="button">Save as draft</button></div>' +
-      '</div>'
+        '<div class="row listing-actions"><button class="btn btn-primary" type="submit">Submit for review</button>' +
+        '<button class="btn btn-quiet" type="button" data-listing-draft>Save as draft</button></div>' +
+      '</form><aside class="listing-preview-shell"><span class="eyebrow">Live guest preview</span><article class="listing-preview" id="listing-preview"><div class="listing-preview-art" id="listing-preview-art" style="background-image:url(' + (NG.state.listingFlyerUrl || img('beach-rave.jpg')) + ')"><span class="tag tag-gold">New listing</span></div><div class="listing-preview-copy"><p id="listing-preview-date">Choose a date</p><h3 id="listing-preview-title">Your event title</h3><span id="listing-preview-venue">Venue appears here</span><div><span>From ₦15,000</span><b>Preview →</b></div></div></article><p class="preview-note">This is the card guests see in Explore. The image crops responsively, so keep essential copy away from the outer 10%.</p></aside></div>'
     );
   };
 

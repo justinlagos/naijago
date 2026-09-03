@@ -225,10 +225,20 @@ the sand field-kit band clear 4.5:1.
 **Verification.** `js/audit.js` sweeps the live DOM and scores every text node
 against its **composited** background — it walks the ancestor chain and blends
 translucent layers rather than reading `rgba(255,255,255,.14)` on ink as pure
-white. The full test run sweeps 32 routes and currently reports **zero
-failures**. Press `A` on any screen, or load with `?audit`, to run it yourself.
+white. The full test run sweeps the complete public, account, partner and
+advertising route set. Press `A` on any screen, or load with `?audit`, to run it
+yourself.
 
 Text sitting over photography cannot be scored by the formula. Those containers
 carry `data-over-image` and the audit skips them; they are verified instead
 against the scrim specification — every image that carries text has a
 `linear-gradient` overlay reaching `rgba(10,10,9,.9)` at the text end.
+
+## 9. Responsive revenue surfaces
+
+Sponsored inventory follows the same grid, type and motion system as organic
+content, but it never borrows organic semantics. Every placement retains a
+visible `Sponsored` or `Advertisement` label. Desktop and mobile crops are
+separate art-direction targets: 970×250 / 320×100 for the home leaderboard,
+728×90 / 320×100 for calendar, 1200×900 for native discovery and 1080×1350 for
+guide stories. Ads are excluded from checkout, payment, passes and gate screens.

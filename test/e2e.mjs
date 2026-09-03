@@ -46,12 +46,12 @@ ok('stat: hosts', (await page.textContent('.hero-stats')).includes('338'));
 ok('stat: scans', (await page.textContent('.hero-stats')).includes('98.4%'));
 ok('ticker duplicated', (await page.$$('.announcement-item')).length === 10);
 ok('logo is the real svg', (await page.getAttribute('.brand-logo','src')) === 'assets/logo.svg');
-ok('nav links', (await page.$$eval('.nav-links a', a=>a.map(x=>x.textContent.trim()).join('|'))) === 'Discover|Events|Festivals|Vendors|Guides');
+ok('nav links', (await page.$$eval('.nav-links a', a=>a.map(x=>x.textContent.trim()).join('|'))) === 'Discover|Calendar|Festivals|Vendors|Guides');
 ok('finder has 3 selects + submit', (await page.$$('.finder select')).length === 3 && !!(await page.$('.finder-submit')));
 ok('4 manually controlled hero moments', (await page.$$('.hero-slide')).length === 4 && (await page.$$('.hero-dots button')).length === 4);
 await page.click('[data-hero-move="1"]');
-ok('hero gallery advances accessibly', (await page.textContent('#hero-label')).includes('Long-table brunch'));
-ok('9 main sections', (await page.$$('main > section')).length === 9);
+ok('hero gallery advances accessibly', (await page.textContent('[data-hero-label]')).includes('Long-table brunch'));
+ok('10 main sections including revenue placement', (await page.$$('main > section')).length === 10);
 ok('3 seasons', (await page.$$('.season-card')).length === 3);
 ok('Detty December foot', body.includes('96 EXPERIENCES · FROM ₦35,000'));
 ok('8 experience cards', (await page.$$('.experience-card')).length === 8);
@@ -67,7 +67,7 @@ ok('field kit book module', (await page.$$('.kit-book')).length === 1 && (await 
 ok('3 hosts named', ['Eko Wave Collective','Naija Food Trails','Terra Culture House'].every(n=>body.includes(n)));
 ok('cta heading', body.includes('Your next story is already happening.'));
 ok('5 swipeable story moments', (await page.$$('.story-card')).length === 5 && !!(await page.$('#story-rail')));
-ok('footer legal and production credit', body.includes('© 2026 NaijaGo Ltd · Lagos') && body.includes('Naira prices · NDPR minded') && body.includes('Powered by Ionec'));
+ok('footer legal and production credit', body.includes('© 2026 NaijaGo Ltd · Lagos') && body.includes('Naira prices · NDPR minded') && body.includes('Powered by ionec'));
 
 /* ---------- 2. Search dialog ---------- */
 await page.click('#search-btn');
@@ -89,21 +89,21 @@ ok('the save actually happened', (await page.getAttribute('.experience-card .sav
 
 /* ---------- 4. Explore + facets ---------- */
 await goto('#/explore');
-ok('explore renders cards', (await page.$$('.experience-card')).length === 8);
+ok('explore renders 8 organic cards plus one native ad', (await page.$$('.experience-card:not(.native-ad)')).length === 8 && (await page.$$('.native-ad')).length === 1);
 ok('Discover alone is current', (await page.$$('.nav-links a[aria-current="page"]')).length === 1 && (await page.textContent('.nav-links a[aria-current="page"]')).trim() === 'Discover');
-await goto('#/explore?mode=events');
-ok('Events alone is current', (await page.$$('.nav-links a[aria-current="page"]')).length === 1 && (await page.textContent('.nav-links a[aria-current="page"]')).trim() === 'Events');
+await goto('#/calendar');
+ok('Calendar alone is current', (await page.$$('.nav-links a[aria-current="page"]')).length === 1 && (await page.textContent('.nav-links a[aria-current="page"]')).trim() === 'Calendar');
 await goto('#/explore');
 await page.check('input[data-facet="vibes"][value="night"]');
 await page.waitForTimeout(120);
-ok('nightlife facet filters to 2', (await page.$$('.experience-card')).length === 2);
+ok('nightlife facet filters to 2', (await page.$$('.experience-card:not(.native-ad)')).length === 2);
 ok('applied chip shown', (await txt()).includes('Nightlife'));
 await page.check('input[data-facet="areas"][value="yaba"]');
 await page.waitForTimeout(120);
 ok('impossible combination gives the empty state', (await page.$$('.empty')).length === 1);
 await page.click('[data-clear-filters]');
 await page.waitForTimeout(120);
-ok('clear brings them back', (await page.$$('.experience-card')).length === 8);
+ok('clear brings them back', (await page.$$('.experience-card:not(.native-ad)')).length === 8);
 
 /* ---------- 5. Detail + maths ---------- */
 await goto('#/experience/beach-rave');
@@ -222,7 +222,33 @@ for (const [hash, phrase] of [
   ['#/partner/scanner','One scan, then it stops working']
 ]) { await goto(hash); ok('partner route ' + hash, (await txt()).includes(phrase)); }
 
-/* ---------- 13. Remaining routes ---------- */
+await goto('#/partner/listing');
+ok('listing upload guidance', (await txt()).includes('1600 × 1200 px recommended') && !!(await page.$('#event-flyer-input')));
+ok('listing live preview', !!(await page.$('#listing-preview')));
+
+/* ---------- 13. Calendar + advertising revenue flow ---------- */
+await goto('#/calendar');
+ok('single calendar renders 7-column month', (await page.$$('.calendar-weekday')).length === 7 && (await page.$$('.calendar-cell:not(.is-empty)')).length === 30);
+ok('selected day shows its experience', (await txt()).includes('Lekki Moonlight Beach Rave'));
+await page.click('[data-calendar-day="2026-09-06"]');
+ok('empty date has useful state', (await txt()).includes('No listed experience on this day'));
+
+await goto('#/advertise');
+ok('advertising inventory has four formats', (await page.$$('.ad-format-card')).length === 4);
+await goto('#/advertise/create');
+await page.click('#ad-campaign-form button[type=submit]');
+await page.waitForTimeout(120);
+ok('campaign enters owner review', page.url().includes('#/advertise/review') && (await txt()).includes('Owner review queue'));
+await page.click('[data-ad-approve]');
+ok('owner approval unlocks payment', (await txt()).includes('Continue to payment'));
+await page.click('a[href="#/advertise/payment"]');
+await page.click('[data-ad-pay]');
+await page.waitForTimeout(120);
+ok('ad transaction reaches confirmation', page.url().includes('#/advertise/confirmed') && (await txt()).includes('Booked. Reviewed. Ready.'));
+await goto('#/advertise/campaigns');
+ok('campaign dashboard reports delivery', (await txt()).includes('48.2k') && (await txt()).includes('3.6% CTR'));
+
+/* ---------- 14. Remaining routes ---------- */
 for (const [hash, phrase] of [
   ['#/seasons','Seasons'],
   ['#/season/detty-december','Detty December'],
@@ -238,14 +264,15 @@ for (const [hash, phrase] of [
   ['#/nowhere','not in the prototype']
 ]) { await goto(hash); ok('route ' + hash, (await txt()).includes(phrase)); }
 
-/* ---------- 14. Contrast sweep across every route ---------- */
-const ROUTES = ['', '#/explore', '#/seasons', '#/season/detty-december', '#/guides', '#/guide/lagos-sunday',
+/* ---------- 15. Contrast sweep across every route ---------- */
+const ROUTES = ['', '#/explore', '#/calendar', '#/seasons', '#/season/detty-december', '#/guides', '#/guide/lagos-sunday',
   '#/hosts', '#/host/eko-wave', '#/experience/beach-rave', '#/experience/nike-art', '#/login',
   '#/failed/declined', '#/failed/timeout', '#/pass/NG-8842-LOS', '#/gate/ok/NG-8842-LOS',
   '#/waitlist/tarkwa', '#/account', '#/account/bookings', '#/account/saved', '#/account/plans',
   '#/account/notifications', '#/account/reviews', '#/account/settings',
   '#/partner', '#/partner/listings', '#/partner/listing', '#/partner/payouts', '#/partner/refunds',
-  '#/partner/scanner', '#/help', '#/transfer/NG-8842-LOS', '#/reschedule/NG-8842-LOS'];
+  '#/partner/scanner', '#/advertise', '#/advertise/create', '#/advertise/review', '#/advertise/payment',
+  '#/advertise/confirmed', '#/advertise/campaigns', '#/help', '#/transfer/NG-8842-LOS', '#/reschedule/NG-8842-LOS'];
 let contrastFails = 0;
 for (const r of ROUTES) {
   await goto(r);
@@ -254,10 +281,10 @@ for (const r of ROUTES) {
 }
 ok('contrast: 0 failures across ' + ROUTES.length + ' routes', contrastFails === 0, contrastFails + ' failures');
 
-/* ---------- 15. Responsive: overflow + touch targets ---------- */
+/* ---------- 16. Responsive: overflow + touch targets ---------- */
 for (const w of [390, 430, 768, 1440]) {
   await page.setViewportSize({ width: w, height: 900 });
-  for (const r of ['', '#/explore', '#/experience/beach-rave', '#/checkout', '#/account', '#/partner']) {
+  for (const r of ['', '#/explore', '#/calendar', '#/advertise/create', '#/experience/beach-rave', '#/checkout', '#/account', '#/partner', '#/partner/listing']) {
     await goto(r);
     const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     ok(`no h-overflow @${w} ${r||'/'}`, over <= 1, over + 'px');
@@ -265,7 +292,7 @@ for (const w of [390, 430, 768, 1440]) {
 }
 await page.setViewportSize({ width: 390, height: 900 });
 let small = [];
-for (const r of ['', '#/explore', '#/experience/beach-rave', '#/account', '#/partner/scanner', '#/pass/NG-8842-LOS']) {
+for (const r of ['', '#/explore', '#/calendar', '#/advertise/create', '#/experience/beach-rave', '#/account', '#/partner/listing', '#/partner/scanner', '#/pass/NG-8842-LOS']) {
   await goto(r);
   const s = await page.evaluate(() => {
     const out = [];
@@ -282,7 +309,14 @@ for (const r of ['', '#/explore', '#/experience/beach-rave', '#/account', '#/par
 }
 ok('touch targets: none under 44px on mobile', small.length === 0, JSON.stringify(small).slice(0, 400));
 
-/* ---------- 16. No runtime errors ---------- */
+await goto('#/explore');
+ok('mobile explore starts with results, not facets', (await page.$eval('.experience-card', e => e.getBoundingClientRect().top)) < 900);
+await page.click('[data-filter-open]');
+ok('mobile filter bottom sheet opens on demand', (await page.getAttribute('#explore-filters','data-open')) === 'true');
+await page.click('[data-filter-close]');
+ok('mobile filter bottom sheet closes', (await page.getAttribute('#explore-filters','data-open')) === 'false');
+
+/* ---------- 17. No runtime errors ---------- */
 const realErrors = errors.filter(e => !/fonts\.(googleapis|gstatic)\.com/.test(e) && !/ERR_CONNECTION_RESET/.test(e));
 ok('no console or page errors', realErrors.length === 0, realErrors.join(' | '));
 

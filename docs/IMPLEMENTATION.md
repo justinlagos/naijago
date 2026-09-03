@@ -29,6 +29,19 @@ Nothing here demands a particular framework. What it does demand:
   scans" is a published promise and it depends on the pass being cached before
   the user reaches the venue. Cache it at issue time, not at open time.
 
+Start implementation from [ARCHITECTURE.md](ARCHITECTURE.md). It is the single
+route-and-service map for discovery, booking, accounts, partner operations and
+advertising.
+
+### Advertising transaction boundary
+
+An advertiser uploads creative first. Store the original privately, validate
+MIME, file size and pixel dimensions on the server, then generate placement
+crops. Platform-owner approval must precede payment. A signed payment webhook
+creates the ledger entry and moves the campaign from `approved` to `scheduled`;
+the browser confirmation page must not do that. Serving, clicks, budget pacing
+and invoices share one immutable campaign id and audit trail.
+
 ---
 
 ## 3. What has to be real on the server

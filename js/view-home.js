@@ -42,10 +42,8 @@
     NG.$$('[data-hero-dot]').forEach(function (dot, i) {
       dot.setAttribute('aria-pressed', String(i === NG.heroIndex));
     });
-    var count = NG.$('#hero-count');
-    var label = NG.$('#hero-label');
-    if (count) count.textContent = String(NG.heroIndex + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
-    if (label) label.textContent = HERO_MOMENTS[NG.heroIndex].label;
+    NG.$$('[data-hero-count]').forEach(function (count) { count.textContent = String(NG.heroIndex + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); });
+    NG.$$('[data-hero-label]').forEach(function (label) { label.textContent = HERO_MOMENTS[NG.heroIndex].label; });
   };
 
   NG.moveStoryRail = function (direction) {
@@ -68,7 +66,7 @@
           return '<div class="hero-slide" data-hero-slide="' + i + '" data-active="' + active + '" aria-hidden="' + (!active) + '" style="background-image:url(' + img(moment.image) + ');background-position:' + moment.position + '"></div>';
         }).join('') +
         '<div class="hero-gallery-controls">' +
-          '<div class="hero-gallery-copy"><span id="hero-count">' + String(NG.heroIndex + 1).padStart(2, '0') + ' / ' + String(HERO_MOMENTS.length).padStart(2, '0') + '</span><strong id="hero-label" aria-live="polite">' + esc(HERO_MOMENTS[NG.heroIndex].label) + '</strong></div>' +
+          '<div class="hero-gallery-copy"><span data-hero-count>' + String(NG.heroIndex + 1).padStart(2, '0') + ' / ' + String(HERO_MOMENTS.length).padStart(2, '0') + '</span><strong data-hero-label aria-live="polite">' + esc(HERO_MOMENTS[NG.heroIndex].label) + '</strong></div>' +
           '<div class="hero-gallery-actions">' +
             '<button type="button" data-hero-move="-1" aria-label="Previous image">←</button>' +
             '<button type="button" data-hero-move="1" aria-label="Next image">→</button>' +
@@ -82,6 +80,11 @@
         '<p class="hero-eyebrow"><span class="pulse" aria-hidden="true"></span>' + esc(S.experiences) + ' experiences live this season</p>' +
         '<h1>Nigeria is happening.<br><em>Go experience it.</em></h1>' +
         '<p class="hero-sub">Real parties, food trails, festivals, concerts and cultural moments — verified, bookable and properly planned.</p>' +
+
+        '<div class="hero-mobile-controls" aria-label="Hero gallery controls">' +
+          '<div><span data-hero-count>' + String(NG.heroIndex + 1).padStart(2, '0') + ' / ' + String(HERO_MOMENTS.length).padStart(2, '0') + '</span><strong data-hero-label aria-live="polite">' + esc(HERO_MOMENTS[NG.heroIndex].label) + '</strong></div>' +
+          '<div><button type="button" data-hero-move="-1" aria-label="Previous image">←</button><button type="button" data-hero-move="1" aria-label="Next image">→</button></div>' +
+        '</div>' +
 
         '<form class="finder" id="finder">' +
           '<div class="finder-field"><label for="f-city">' + NG.icon('location') + 'City</label>' +
@@ -261,6 +264,6 @@
       '</div>' +
     '</section>';
 
-    return hero + seasons + weekend + vibes + trust + guides + kit + hosts + cta;
+    return hero + seasons + weekend + '<section class="ad-section"><div class="wrap">' + NG.adSlot('leaderboard') + '</div></section>' + vibes + trust + guides + kit + hosts + cta;
   };
 })(window.NG = window.NG || {});

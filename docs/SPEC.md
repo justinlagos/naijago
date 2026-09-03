@@ -93,8 +93,9 @@ not, it has a refund against it, and that refund is itemised separately.
 
 | Route | Screen |
 |---|---|
-| `#/` | Homepage — nine sections |
+| `#/` | Homepage — ten sections including one responsive sponsored placement |
 | `#/explore` · `?vibe=` | Faceted browse: vibe, area, price; sort; applied-filter chips; empty state |
+| `#/calendar` | Unified month calendar, date results and calendar sponsor |
 | `#/seasons` | Season index |
 | `#/season/:id` · `?view=list\|calendar\|map` | Season guide, three views |
 | `#/guides` · `#/guide/:id` | Guide index and article shell |
@@ -111,6 +112,7 @@ not, it has a refund against it, and that refund is itemised separately.
 | `#/account` + `/bookings` `/passes` `/saved` `/plans` `/notifications` `/reviews` `/settings` | Account area |
 | `#/plan` | Weekend plan with clash detection |
 | `#/partner` + `/listings` `/listing` `/payouts` `/refunds` `/scanner` | Partner console |
+| `#/advertise` + `/create` `/review` `/payment` `/confirmed` `/campaigns` | Advertising inventory and complete campaign transaction flow |
 | `#/help` | Help centre |
 | anything else | Not-found |
 

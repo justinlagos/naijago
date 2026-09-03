@@ -1,0 +1,19 @@
+{
+  "name": "NaijaGo — Nigerian experiences",
+  "short_name": "NaijaGo",
+  "description": "Discover, plan, book and access Nigerian experiences.",
+  "start_url": "./#/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F4EF",
+  "theme_color": "#0A0A09",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

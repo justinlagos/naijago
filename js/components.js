@@ -135,6 +135,33 @@
     '</a>';
   };
 
+  /* ---- Revenue placements --------------------------------------------
+     Ads always carry an explicit label. The visual treatment adapts to the
+     surrounding surface, but the paid relationship never becomes hidden. */
+  NG.adSlot = function (format, variant) {
+    var formats = {
+      leaderboard: { size: '970 × 250 · mobile 320 × 100', title: 'Move through Lagos with confidence', copy: 'Ride credit for the way there and the way home.', cta: 'See the offer', image: 'hero-waterfront.jpg' },
+      calendar: { size: '728 × 90 · mobile 320 × 100', title: 'Your weekend, connected', copy: 'Sponsored city transport for selected September dates.', cta: 'Plan the ride', image: 'lagos-water.jpg' },
+      guide: { size: '1080 × 1350 · 4:5', title: 'A considered Lagos stay', copy: 'Rest between the moments worth going out for.', cta: 'Explore stays', image: 'story-lagoon.jpg' }
+    };
+    var a = formats[format] || formats.leaderboard;
+    return '<aside class="ad-slot ad-' + format + (variant ? ' ' + variant : '') + '" aria-label="Advertisement">' +
+      '<div class="ad-art" style="background-image:url(' + img(a.image) + ')" aria-hidden="true"></div>' +
+      '<div class="ad-copy"><span class="ad-label">Sponsored · ' + esc(a.size) + '</span><strong>' + esc(a.title) + '</strong><p>' + esc(a.copy) + '</p></div>' +
+      '<a class="ad-cta" href="#/advertise">' + esc(a.cta) + ' <span aria-hidden="true">→</span></a>' +
+    '</aside>';
+  };
+
+  NG.nativeAdCard = function () {
+    return '<article class="experience-card native-ad" aria-label="Sponsored recommendation">' +
+      '<div class="card-media" style="background-image:url(' + img('story-food-market.jpg') + ')">' +
+        '<span class="category food">' + NG.icon('food') + 'Sponsored</span>' +
+      '</div>' +
+      '<div class="card-body"><p class="card-when">Paid placement · 1200 × 900</p><h3><a class="card-link" href="#/advertise">Taste Lagos beyond the obvious</a></h3><p>A locally made weekend route from our presenting partner.</p></div>' +
+      '<div class="card-foot"><span class="rating">Advertisement</span><span class="price">Discover →</span></div>' +
+    '</article>';
+  };
+
   /* ---- Header / chrome refresh ----------------------------------------- */
   NG.renderChrome = function () {
     var s = NG.state;
@@ -149,8 +176,7 @@
     NG.$$('#city-label').forEach(function (el) { el.textContent = s.city; });
     var fullRoute = location.hash || '#/';
     var route = fullRoute.split('?')[0];
-    var navKey = fullRoute.indexOf('#/explore?mode=events') === 0 ? 'events'
-      : route === '#/explore' ? 'discover' : '';
+    var navKey = route === '#/calendar' ? 'events' : route === '#/explore' ? 'discover' : '';
     NG.$$('.nav-links a, .mobile-dock button').forEach(function (a) {
       var t = a.getAttribute('href') || a.dataset.go;
       var matchesNav = a.dataset.nav ? a.dataset.nav === navKey : t && t === route;

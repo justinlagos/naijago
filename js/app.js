@@ -14,6 +14,7 @@
   var ROUTES = [
     [/^#?\/?$/,                            function () { return NG.views.home(); }],
     [/^#\/explore/,                        function () { return NG.views.explore(); }],
+    [/^#\/calendar$/,                      function () { return NG.views.calendar(); }],
     [/^#\/seasons$/,                       function () { return NG.views.seasons(); }],
     [/^#\/season\/([\w-]+)/,               function (m) { return NG.views.season(m[1]); }],
     [/^#\/guides$/,                        function () { return NG.views.guides(); }],
@@ -39,6 +40,12 @@
     [/^#\/account\/settings/,              function () { return NG.views.settings(); }],
     [/^#\/account/,                        function () { return NG.views.account(); }],
     [/^#\/plan$/,                          function () { return NG.views.plans(); }],
+    [/^#\/advertise\/create$/,             function () { return NG.views.advertiseCreate(); }],
+    [/^#\/advertise\/review$/,             function () { return NG.views.advertiseReview(); }],
+    [/^#\/advertise\/payment$/,            function () { return NG.views.advertisePayment(); }],
+    [/^#\/advertise\/confirmed$/,          function () { return NG.views.advertiseConfirmed(); }],
+    [/^#\/advertise\/campaigns$/,          function () { return NG.views.advertiseCampaigns(); }],
+    [/^#\/advertise$/,                     function () { return NG.views.advertise(); }],
     [/^#\/partner\/listings/,              function () { return NG.views.partnerListings(); }],
     [/^#\/partner\/listing/,               function () { return NG.views.partnerListing(); }],
     [/^#\/partner\/payouts/,               function () { return NG.views.partnerPayouts(); }],
@@ -72,7 +79,7 @@
   NG.observeSections = function () {
     if (NG.sectionObserver) NG.sectionObserver.disconnect();
     if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var sections = NG.$$('#main > section:not(.hero)');
+    var sections = NG.$$('#main > section:not(.hero):not(.calendar-hero):not(.ad-sales-hero):not(.season-hero):not(.detail-hero)');
     sections.forEach(function (section) { section.classList.add('reveal-section'); });
     NG.sectionObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -161,7 +168,7 @@
         NG.icon(shortcutIcon) + '<span class="shortcut-copy"><strong>' + esc(s.label) + '</strong><span>' + esc(s.sub) + '</span></span></button>';
     }).join('');
     var dock = NG.$$('.mobile-dock button');
-    [NG.icons.waypoint, NG.icons.nearby, NG.icons.calendar, NG.icons.ticketBrand].forEach(function (ic, i) {
+    [NG.icons.home, NG.icons.nearby, NG.icons.calendar, NG.icons.saved, NG.icons.ticketBrand].forEach(function (ic, i) {
       if (dock[i]) dock[i].insertAdjacentHTML('afterbegin', ic);
     });
   }
@@ -188,6 +195,30 @@
       mm.dataset.open = String(open);
       NG.$('#menu-btn').setAttribute('aria-expanded', String(open));
       return;
+    }
+
+    if (t.closest('[data-filter-open]')) {
+      NG.state.filtersOpen = true;
+      var filterPanel = NG.$('#explore-filters');
+      if (filterPanel) filterPanel.dataset.open = 'true';
+      document.body.style.overflow = 'hidden';
+      return;
+    }
+    if (t.closest('[data-filter-close]') || (t.classList && t.classList.contains('filter-scrim'))) {
+      NG.state.filtersOpen = false;
+      var closingPanel = NG.$('#explore-filters');
+      if (closingPanel) closingPanel.dataset.open = 'false';
+      document.body.style.overflow = '';
+      return;
+    }
+
+    var day = t.closest('[data-calendar-day]');
+    if (day) { NG.state.calendarDay = day.dataset.calendarDay; NG.render(); return; }
+    var month = t.closest('[data-calendar-month]');
+    if (month) {
+      NG.state.calendarMonth = month.dataset.calendarMonth;
+      NG.state.calendarDay = month.dataset.calendarMonth + '-01';
+      NG.render(); return;
     }
 
     var sv = t.closest('[data-save]');
@@ -290,7 +321,9 @@
     if (t.closest('[data-review]')) { NG.toast('Posted', 'Your review is live on the experience page.'); return; }
     if (t.closest('[data-readall]')) { NG.NOTIFICATIONS.forEach(function (n2) { n2.unread = false; }); NG.render(); return; }
     if (t.closest('[data-save-settings]')) { NG.toast('Saved', 'Your details are up to date.'); return; }
-    if (t.closest('[data-listing-submit]')) { NG.toast('Submitted', 'A human reviews this within one working day.'); return; }
+    if (t.closest('[data-listing-draft]')) { NG.state.listingStatus = 'draft'; NG.toast('Draft saved', 'Your listing stays private until you submit it.'); return; }
+    if (t.closest('[data-ad-approve]')) { NG.state.adCampaign.status = 'approved'; NG.toast('Approved', 'The campaign can now move to payment.'); NG.render(); return; }
+    if (t.closest('[data-ad-pay]')) { NG.state.adCampaign.status = 'live'; NG.go('#/advertise/confirmed'); return; }
     if (t.closest('[data-reschedule]')) { NG.toast('Moved', 'Your pass now shows the new date.'); NG.go('#/pass/NG-8842-LOS'); return; }
 
     var tg = t.closest('[data-toggle]');
@@ -336,8 +369,48 @@
       else NG.state.filters[k] = arr.filter(function (x) { return x !== t.value; });
       NG.render(); return;
     }
-    if (t.id === 'sort-select') { NG.state.sort = t.value; NG.render(); return; }
+    if (t.id === 'sort-select' || t.id === 'sort-select-mobile') {
+      if (t.value && t.value !== 'Sort') NG.state.sort = t.value;
+      NG.render(); return;
+    }
     if (t.name === 'tier') { NG.state.cart.tier = t.value; NG.state.cart.qty = 1; NG.render(); return; }
+
+    if (t.id === 'event-flyer-input' || t.id === 'ad-creative-input') {
+      var file = t.files && t.files[0];
+      var status = NG.$(t.id === 'event-flyer-input' ? '#flyer-status' : '#ad-creative-status');
+      if (!file) return;
+      if (!/^image\/(jpeg|png)$/.test(file.type) || file.size > 10 * 1024 * 1024) {
+        if (status) status.textContent = 'Use a JPG or PNG no larger than 10 MB.';
+        t.value = '';
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function () {
+        if (t.id === 'event-flyer-input') {
+          NG.state.listingFlyerUrl = reader.result;
+          var preview = NG.$('#listing-preview-art');
+          if (preview) preview.style.backgroundImage = 'url("' + reader.result + '")';
+        } else {
+          NG.state.adCampaign.creativeUrl = reader.result;
+          var adPreview = NG.$('#ad-creative-preview');
+          if (adPreview) adPreview.style.backgroundImage = 'url("' + reader.result + '")';
+        }
+        if (status) status.textContent = file.name + ' · ready to preview';
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+  });
+
+  document.addEventListener('input', function (ev) {
+    var f = ev.target.closest && ev.target.closest('#listing-form');
+    if (!f) return;
+    var title = NG.$('#listing-title');
+    var date = NG.$('#listing-date');
+    var venue = NG.$('#listing-venue');
+    if (title && NG.$('#listing-preview-title')) NG.$('#listing-preview-title').textContent = title.value || 'Your event title';
+    if (date && NG.$('#listing-preview-date')) NG.$('#listing-preview-date').textContent = date.value ? new Date(date.value + 'T12:00:00').toLocaleDateString('en-NG', { weekday: 'short', day: 'numeric', month: 'short' }) : 'Choose a date';
+    if (venue && NG.$('#listing-preview-venue')) NG.$('#listing-preview-venue').textContent = venue.value || 'Venue appears here';
   });
 
   document.addEventListener('submit', function (ev) {
@@ -382,10 +455,37 @@
       NG.go('#/pass/NG-8842-LOS');
       return;
     }
+
+    if (f.id === 'listing-form') {
+      NG.state.listingStatus = 'review';
+      NG.toast('Submitted', 'A human reviews your listing within one working day.');
+      NG.go('#/partner/listings');
+      return;
+    }
+
+    if (f.id === 'ad-campaign-form') {
+      var ad = new FormData(f);
+      NG.state.adCampaign.name = ad.get('name') || NG.state.adCampaign.name;
+      NG.state.adCampaign.title = ad.get('title') || NG.state.adCampaign.title;
+      NG.state.adCampaign.format = ad.get('format') || NG.state.adCampaign.format;
+      NG.state.adCampaign.destination = ad.get('destination') || NG.state.adCampaign.destination;
+      NG.state.adCampaign.start = ad.get('start') || NG.state.adCampaign.start;
+      NG.state.adCampaign.end = ad.get('end') || NG.state.adCampaign.end;
+      NG.state.adCampaign.budget = Number(ad.get('budget')) || NG.state.adCampaign.budget;
+      NG.state.adCampaign.status = 'review';
+      NG.go('#/advertise/review');
+      return;
+    }
   });
 
   document.addEventListener('keydown', function (ev) {
-    if (ev.key === 'Escape') NG.closeDialog();
+    if (ev.key === 'Escape') {
+      NG.closeDialog();
+      NG.state.filtersOpen = false;
+      var filterPanel = NG.$('#explore-filters');
+      if (filterPanel) filterPanel.dataset.open = 'false';
+      document.body.style.overflow = '';
+    }
     if (document.activeElement && document.activeElement.id === 'hero-carousel') {
       if (ev.key === 'ArrowLeft') { ev.preventDefault(); NG.setHeroSlide(NG.heroIndex - 1); }
       if (ev.key === 'ArrowRight') { ev.preventDefault(); NG.setHeroSlide(NG.heroIndex + 1); }

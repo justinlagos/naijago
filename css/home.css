@@ -42,6 +42,7 @@
 .hero-dots button::after{content:"";position:absolute;inset:4px 0 5px;background:rgba(255,255,255,.34);transition:background .18s ease,transform .18s ease}
 .hero-dots button:hover::after{background:rgba(255,255,255,.68);transform:scaleY(1.5)}
 .hero-dots button[aria-pressed="true"]::after{background:var(--gold-500)}
+.hero-mobile-controls{display:none}
 .hero .wrap{position:relative;z-index:2;padding:96px 0 110px;width:min(var(--max),100% - (var(--gutter) * 2))}
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:11px;margin-bottom:26px;
@@ -191,6 +192,22 @@
 .save-button{z-index:3}
 .category,.card-badge{z-index:2}
 .load-more{margin-top:34px;text-align:center}
+
+/* ---- Contextual advertising ------------------------------------------ */
+.ad-section{padding:26px 0 70px}
+.ad-slot{position:relative;isolation:isolate;overflow:hidden;background:var(--ink-900);color:var(--white);display:grid;grid-template-columns:minmax(220px,.7fr) 1.5fr auto;align-items:center;min-height:180px}
+.ad-art{position:absolute;inset:0;z-index:-2;background:center/cover no-repeat;filter:saturate(.78)}
+.ad-slot::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(10,10,9,.93),rgba(10,10,9,.72) 55%,rgba(10,10,9,.35))}
+.ad-copy{grid-column:2;padding:28px 36px}
+.ad-label{display:block;color:var(--gold-on-ink);font-size:9px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;margin-bottom:8px}
+.ad-copy strong{display:block;font-size:clamp(22px,2.5vw,34px);letter-spacing:-1px;line-height:1.05;margin-bottom:6px}
+.ad-copy p{margin:0;color:rgba(255,255,255,.8);font-size:13px}
+.ad-cta{margin:28px 32px;padding:13px 16px;border:1px solid rgba(255,255,255,.45);color:var(--white);text-decoration:none;font-size:12px;font-weight:700;white-space:nowrap}
+.ad-cta:hover{background:var(--gold-500);border-color:var(--gold-500);color:var(--ink-900);text-decoration:none}
+.ad-guide{min-height:260px;grid-template-columns:180px 1fr}.ad-guide .ad-art{position:relative;z-index:auto;grid-row:1;aspect-ratio:4/5}.ad-guide::after{background:linear-gradient(90deg,rgba(10,10,9,.35),rgba(10,10,9,.96) 34%)}.ad-guide .ad-copy{grid-column:2;padding:28px}.ad-guide .ad-cta{grid-column:2;justify-self:start;margin:0 28px 28px}
+.calendar-hero.reveal-section,.ad-sales-hero.reveal-section{opacity:1;transform:none}
+.native-ad{border-color:var(--gold-500)}
+.native-ad .card-foot{color:var(--n-600)}
 
 /* ---- Vibe (ink) -------------------------------------------------------- */
 .vibe-section{background:var(--ink-900);color:var(--white)}

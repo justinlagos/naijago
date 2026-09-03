@@ -55,3 +55,21 @@ references.
 - Card entry is represented by a safe simulation; no real payment details are
   collected.
 - The displayed QR is deterministic artwork, not a scannable credential.
+# v1.4 responsive and revenue audit
+
+- Replaced the full-height mobile Explore sidebar with a sticky filter trigger
+  and accessible bottom sheet; results now appear in the first content viewport.
+- Removed hero navigation from the image overlay on mobile and placed it in a
+  compact in-flow rail with 44px controls, swipe and keyboard support.
+- Removed the mobile hero's floating social card and compressed finder and stat
+  spacing to eliminate the dead black region shown in the supplied captures.
+- Reordered the field-kit story on mobile so its headline and value arrive before
+  the compact book composition; removed the overlapping detail card.
+- Preserved seven calendar columns on mobile with tap-safe dates and concise
+  event markers, instead of turning one month into a long vertical list.
+- Added safe responsive advertising formats with visible sponsorship labels;
+  no ad appears inside checkout, payment, passes or gate validation.
+- Added a live event-card preview, file guidance and safe-crop instruction to
+  the listing editor.
+- Increased bottom safe-area clearance for the five-action app dock and kept
+  transient messaging above it.

@@ -3,12 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0A0A09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>NaijaGo — Find your next Nigerian experience</title>
 <meta name="description" content="Discover, book and remember Nigeria's best real-world experiences. Verified hosts, fees shown upfront, passes that scan offline.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/site.css">
@@ -33,7 +37,7 @@
     </a>
     <nav class="nav-links" aria-label="Main navigation">
       <a href="#/explore" data-nav="discover">Discover</a>
-      <a href="#/explore?mode=events" data-nav="events">Events</a>
+      <a href="#/calendar" data-nav="events">Calendar</a>
       <a href="#/seasons">Festivals</a>
       <a href="#/hosts">Vendors</a>
       <a href="#/guides">Guides</a>
@@ -53,7 +57,7 @@
 
 <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" data-open="false">
   <a href="#/explore">Discover</a>
-  <a href="#/explore?mode=events">Events</a>
+  <a href="#/calendar">Calendar</a>
   <a href="#/seasons">Festivals</a>
   <a href="#/hosts">Verified vendors</a>
   <a href="#/guides">City guides</a>
@@ -86,7 +90,7 @@
           <li><a href="#/partner">List an event</a></li>
           <li><a href="#/partner">Sell tickets</a></li>
           <li><a href="#/partner">Partnerships</a></li>
-          <li><a href="#/partner">Advertise</a></li>
+          <li><a href="#/advertise">Advertise</a></li>
         </ul>
       </div>
       <div>
@@ -101,16 +105,17 @@
     </div>
     <div class="footer-base">
       <span>© 2026 NaijaGo Ltd · Lagos</span>
-      <span class="footer-credits"><strong>Powered by Ionec</strong><span aria-hidden="true">·</span><span>Naira prices · NDPR minded</span></span>
+      <span class="footer-credits"><strong>Powered by ionec</strong><span aria-hidden="true">·</span><span>Naira prices · NDPR minded</span></span>
     </div>
   </div>
 </footer>
 
 <nav class="mobile-dock" aria-label="Mobile navigation">
   <ul>
-    <li><button type="button" data-go="#/">Go</button></li>
-    <li><button type="button" data-open-dialog="search-dialog">Search</button></li>
-    <li><button type="button" data-go="#/explore?mode=events" data-nav="events">Events</button></li>
+    <li><button type="button" data-go="#/">Home</button></li>
+    <li><button type="button" data-go="#/explore" data-nav="discover">Explore</button></li>
+    <li><button type="button" data-go="#/calendar" data-nav="events">Calendar</button></li>
+    <li><button type="button" data-go="#/account/saved">Saved</button></li>
     <li><button type="button" data-go="#/account/passes">Passes</button></li>
   </ul>
 </nav>
@@ -153,11 +158,18 @@
 <script src="js/components.js"></script>
 <script src="js/view-home.js"></script>
 <script src="js/view-discover.js"></script>
+<script src="js/view-calendar.js"></script>
+<script src="js/view-advertise.js"></script>
 <script src="js/view-book.js"></script>
 <script src="js/view-pass.js"></script>
 <script src="js/view-account.js"></script>
 <script src="js/view-partner.js"></script>
-<script src="js/app.js?v=1.3.0"></script>
+<script src="js/app.js?v=1.4.1"></script>
 <script src="js/audit.js"></script>
+<script>
+if ('serviceWorker' in navigator) window.addEventListener('load', function () {
+  navigator.serviceWorker.register('sw.js').catch(function () {});
+});
+</script>
 </body>
 </html>

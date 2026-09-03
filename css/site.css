@@ -85,7 +85,7 @@
   display:none;position:fixed;left:0;right:0;bottom:0;z-index:56;
   background:var(--ink-900);border-top:1px solid var(--ink-700);padding-bottom:env(safe-area-inset-bottom);
 }
-.mobile-dock ul{display:grid;grid-template-columns:repeat(4,1fr)}
+.mobile-dock ul{display:grid;grid-template-columns:repeat(5,1fr)}
 .mobile-dock button{
   width:100%;min-height:60px;background:transparent;border:0;color:#DAD9CF;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;

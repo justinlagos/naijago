@@ -6,6 +6,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT  = process.argv[2] || join(ROOT, 'naijago-prototype.html');
 
 let html = readFileSync(join(ROOT, 'index.html'), 'utf8');
+html = html.replace(/<link rel="manifest"[^>]*>\n?/, '');
+html = html.replace(/<script>\nif \('serviceWorker'[\s\S]*?<\/script>\n?/, '');
 
 /* --- images and logo as data URIs ---------------------------------------- */
 const data = {};

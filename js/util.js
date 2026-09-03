@@ -24,7 +24,23 @@
     online: true,
     waitlistClaim: null,
     menuOpen: false,
-    scans: []
+    scans: [],
+    filtersOpen: false,
+    calendarMonth: '2026-09',
+    calendarDay: '2026-09-05',
+    listingStatus: 'draft',
+    listingFlyerUrl: '',
+    adCampaign: {
+      status: 'draft',
+      format: 'native',
+      name: 'September Lagos launch',
+      title: 'Make the weekend yours',
+      destination: 'https://example.com',
+      start: '2026-09-12',
+      end: '2026-09-26',
+      budget: 450000,
+      creativeUrl: ''
+    }
   };
 
   /* ---- DOM ------------------------------------------------------------- */
