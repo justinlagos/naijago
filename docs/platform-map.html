@@ -1,0 +1,613 @@
+<title>NaijaGo Platform Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#F2F1EA; --surface:#FFFFFF; --sunk:#E8E6DC;
+  --ink:#14130E; --body:#4A4941; --dim:#6E6D62; --line:#CFCCC0; --hair:#E2DFD4;
+  --gold:#8F6318; --gold-fill:#BF8422; --ok:#12604C; --warn:#8A5304; --bad:#A32A16;
+  --zone:#FBFAF5; --zone-stop:#FBF2EE;
+  --ui:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#100F0C; --surface:#1A1914; --sunk:#232219;
+    --ink:#F2F0E7; --body:#C6C3B6; --dim:#918E82; --line:#3A382E; --hair:#2A2921;
+    --gold:#E3BC6C; --gold-fill:#BF8422; --ok:#6FC0A5; --warn:#D9A44A; --bad:#EA9080;
+    --zone:#17160F; --zone-stop:#1E1611;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#100F0C; --surface:#1A1914; --sunk:#232219;
+  --ink:#F2F0E7; --body:#C6C3B6; --dim:#918E82; --line:#3A382E; --hair:#2A2921;
+  --gold:#E3BC6C; --gold-fill:#BF8422; --ok:#6FC0A5; --warn:#D9A44A; --bad:#EA9080;
+  --zone:#17160F; --zone-stop:#1E1611;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--body);
+  font-family:var(--ui);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{width:min(1760px,100% - 48px);margin-inline:auto}
+h1,h2,h3{margin:0;color:var(--ink);font-weight:800;letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
+p{margin:0}
+code,.mono{font-family:var(--mono);font-size:.88em}
+
+/* ---- Masthead ---- */
+header.mast{padding:56px 0 30px;border-bottom:1px solid var(--line)}
+.kicker{
+  font-size:11px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+.kicker::before{content:"";width:22px;height:8px;background:var(--gold-fill);
+  clip-path:polygon(0 0,100% 0,100% 68%,68% 100%,0 100%)}
+h1{font-size:clamp(38px,5vw,66px);letter-spacing:-2.6px;max-width:20ch;margin-bottom:18px}
+.lede{font-size:18px;max-width:74ch;color:var(--body)}
+.lede strong{color:var(--ink);font-weight:600}
+
+/* ---- Counts strip ---- */
+.counts{display:flex;flex-wrap:wrap;gap:0;margin-top:34px;border:1px solid var(--line);background:var(--surface)}
+.counts div{flex:1 1 150px;padding:16px 20px;border-right:1px solid var(--hair)}
+.counts div:last-child{border-right:0}
+.counts dt{font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.counts dd{margin:0;font-size:28px;font-weight:800;color:var(--ink);letter-spacing:-1.2px;font-variant-numeric:tabular-nums}
+.counts dd span{font-size:13px;font-weight:600;color:var(--dim);letter-spacing:0;margin-left:6px}
+
+/* ---- Read-me ---- */
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:34px 0 0;border:1px solid var(--line);border-bottom:0;background:var(--surface)}
+.howto section{padding:20px 22px;border-right:1px solid var(--hair)}
+.howto section:last-child{border-right:0}
+.howto h3{font-size:13px;letter-spacing:.4px;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+.howto p{font-size:13.5px;color:var(--body)}
+.sw{width:11px;height:11px;flex:0 0 auto}
+.sw-ad{background:var(--gold-fill)}
+.sw-ok{background:var(--ok)}
+.sw-bad{background:var(--bad)}
+
+/* ---- Figure ---- */
+figure.map{margin:0 0 8px;border:1px solid var(--line);background:var(--surface)}
+.maptools{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  padding:12px 18px;border-bottom:1px solid var(--hair);background:var(--sunk);
+}
+.maptools p{font-size:12px;color:var(--dim);letter-spacing:.3px}
+.maptools button{
+  font:inherit;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  min-height:36px;padding:0 15px;background:transparent;color:var(--ink);
+  border:1px solid var(--line);cursor:pointer;
+}
+.maptools button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.mapscroll{overflow:auto;padding:26px;max-height:none}
+.mapscroll svg{display:block;width:100%;height:auto;max-width:1720px;margin-inline:auto;color:var(--body)}
+.mapscroll.actual svg{width:1720px;max-width:none;margin-inline:0}
+figcaption{padding:0 2px;font-size:13px;color:var(--dim);margin-bottom:52px}
+
+/* ---- SVG element styles ---- */
+.zone{fill:var(--zone);stroke:var(--line);stroke-width:1}
+.zone.stop{fill:var(--zone-stop);stroke:var(--bad);stroke-dasharray:5 4}
+.zl{font-family:var(--ui);font-size:11px;font-weight:800;letter-spacing:1.8px;fill:var(--ink);text-transform:uppercase}
+.zn{font-family:var(--ui);font-size:10px;font-weight:700;letter-spacing:1.6px;fill:var(--dim);text-transform:uppercase}
+.zone.stop + .zl,.stop ~ .zn{fill:var(--bad)}
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.box.hub{stroke:var(--ink);stroke-width:2}
+.box.gate{fill:var(--sunk);stroke:var(--gold-fill);stroke-width:2}
+.box.ok{fill:var(--surface);stroke:var(--ok);stroke-width:1.6}
+.box.bad{fill:var(--surface);stroke:var(--bad);stroke-width:1.6}
+.box.warn{fill:var(--surface);stroke:var(--warn);stroke-width:1.6}
+.box.sm{fill:var(--surface)}
+.bt{font-family:var(--ui);font-size:13px;font-weight:700;fill:var(--ink)}
+.bt.sm{font-size:11.5px}
+.rt{font-family:var(--mono);font-size:10px;fill:var(--gold);letter-spacing:.2px}
+.rt.sm{font-size:9px}
+.sb{font-family:var(--ui);font-size:11.5px;fill:var(--body)}
+.sb.dim{fill:var(--dim)}
+.sb.stop{fill:var(--bad)}
+.nt{font-family:var(--ui);font-size:12.5px;fill:var(--dim)}
+.cp{font-family:var(--ui);font-size:10px;font-weight:700;letter-spacing:1px;fill:var(--ink);text-transform:uppercase}
+.chip{fill:var(--sunk);stroke:var(--line)}
+.chip.ok{fill:none;stroke:var(--ok);stroke-width:1.4}
+.chip.warn{fill:none;stroke:var(--warn);stroke-width:1.4}
+.chip.bad{fill:none;stroke:var(--bad);stroke-width:1.4}
+.ar{stroke:var(--body);stroke-width:1.4;fill:none;color:var(--body)}
+.ar.tick{stroke:var(--line);color:var(--line)}
+.ar.dash{stroke-dasharray:5 4}
+.ar.nohead{marker-end:none}
+.ar.gold{stroke:var(--gold);color:var(--gold)}
+.ar.ok{stroke:var(--ok);color:var(--ok)}
+.ar.bad{stroke:var(--bad);color:var(--bad)}
+.al{font-family:var(--ui);font-size:11px;font-weight:600;fill:var(--dim)}
+.al.bad{fill:var(--bad)}
+.admark{fill:var(--gold-fill)}
+.admark.ok{fill:var(--ok)}.admark.warn{fill:var(--warn)}.admark.bad{fill:var(--bad)}
+.admark.srv{fill:var(--ink)}
+.rule{stroke:var(--hair);stroke-width:1}
+/* Text-only helpers. Unscoped, these filled every shape that shares the class. */
+text.gold,tspan.gold{fill:var(--gold)}
+text.ok,tspan.ok{fill:var(--ok)}
+
+/* ---- Footer note ---- */
+.order{border-top:1px solid var(--line);padding:34px 0 70px}
+.order h2{font-size:24px;letter-spacing:-.9px;margin-bottom:16px}
+.order ol{margin:0;padding:0;list-style:none;counter-reset:s;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px 26px}
+.order li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:10px;font-size:14px}
+.order li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:11px;
+  font-weight:600;color:var(--gold);padding-top:3px}
+.order li b{color:var(--ink);font-weight:600}
+
+@media (max-width:900px){
+  .wrap{width:calc(100% - 32px)}
+  .howto,.order ol{grid-template-columns:1fr}
+  .howto section{border-right:0;border-bottom:1px solid var(--hair)}
+  .mapscroll{padding:12px}
+  .mapscroll svg{width:1720px;max-width:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:2px solid var(--gold-fill);outline-offset:3px}
+</style>
+
+<header class="mast"><div class="wrap">
+  <p class="kicker">NaijaGo · platform architecture · v1.4.1 · verified against the live build</p>
+  <h1>Every screen, every state, one page.</h1>
+  <p class="lede">This is the whole product in one drawing. Five ways in, a discovery layer that funnels into a
+  <strong>single experience screen</strong>, an auth wall that remembers what you were doing, a booking pipeline with
+  <strong>one success and four failures</strong>, and the fulfilment path that ends at a gate in a field with no signal.
+  The four advertising placements, the self-serve advertise funnel and the two-fee money model sit alongside it,
+  because all three change how the screens are built.</p>
+
+  <dl class="counts">
+    <div><dt>Routes</dt><dd>35</dd></div>
+    <div><dt>Screens built</dt><dd>32</dd></div>
+    <div><dt>States</dt><dd>13 <span>surfaces</span></dd></div>
+    <div><dt>Payment outcomes</dt><dd>5 <span>1 good, 4 not</span></dd></div>
+    <div><dt>Placements</dt><dd>4</dd></div>
+    <div><dt>Buyer fee</dt><dd>5%</dd></div>
+    <div><dt>Host commission</dt><dd>8%</dd></div>
+    <div><dt>Seat hold</dt><dd>10:00</dd></div>
+  </dl>
+
+  <div class="howto">
+    <section>
+      <h3><span class="sw sw-ad"></span>Gold marks revenue</h3>
+      <p>A small gold square marks a screen carrying one of the four placements. The booking zone is drawn in a broken red
+      outline because it carries none, though today that holds by placement rather than by a coded guard.</p>
+    </section>
+    <section>
+      <h3><span class="sw sw-ok"></span>Teal is settled, red is stop</h3>
+      <p>Teal marks a fact that is already true: confirmed, verified, admitted. Red marks a dead end the user has to be
+      walked out of. Neither is decoration; both map to real components.</p>
+    </section>
+    <section>
+      <h3>Arrows carry the transition</h3>
+      <p>Every arrow is labelled with what actually happens on it. Routes are the hash routes the prototype ships,
+      so you can open any box in the running build and see it.</p>
+    </section>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <figure class="map">
+    <div class="maptools">
+      <p>1720 × 2186, dense by design. Switch to actual size and pan if the labels are tight.</p>
+      <button type="button" id="zoom" aria-pressed="false">Actual size</button>
+    </div>
+    <div class="mapscroll" id="scroll">
+      <svg viewBox="0 0 1720 2186" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="One map of the NaijaGo platform v1.4.1: five entry points feed a discovery layer that funnels into a single experience detail screen; an auth wall records and replays intent; a booking pipeline of cart, seat hold, checkout and three payment rails produces one success and four failure states; fulfilment covers the pass in four states and the gate; side rails carry the four advertising placements and the self-serve advertise funnel, the PWA offline shell, the waitlist claim loop, the account area and the two-fee money model; the partner console and the server-side responsibilities run along the bottom.">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker></defs>
+<text class="zl" x="44" y="34">ENTRY</text>
+<rect class="box " x="44" y="46" width="212" height="46" rx="2"/>
+<text class="bt" x="56" y="68">Header nav</text>
+<text class="sb" x="56" y="82">desktop</text>
+<line class="ar tick" x1="150" y1="92" x2="150" y2="128" marker-end="url(#ah)"/>
+<rect class="box " x="268" y="46" width="212" height="46" rx="2"/>
+<text class="bt" x="280" y="68">Mobile dock</text>
+<text class="sb" x="280" y="82">4 tabs</text>
+<line class="ar tick" x1="374" y1="92" x2="374" y2="128" marker-end="url(#ah)"/>
+<rect class="box " x="492" y="46" width="212" height="46" rx="2"/>
+<text class="bt" x="504" y="68">Search dialog</text>
+<text class="sb" x="504" y="82">/ key</text>
+<line class="ar tick" x1="598" y1="92" x2="598" y2="128" marker-end="url(#ah)"/>
+<rect class="box " x="716" y="46" width="212" height="46" rx="2"/>
+<text class="bt" x="728" y="68">Deep link</text>
+<text class="sb" x="728" y="82">any #/route</text>
+<line class="ar tick" x1="822" y1="92" x2="822" y2="128" marker-end="url(#ah)"/>
+<rect class="box " x="940" y="46" width="212" height="46" rx="2"/>
+<text class="bt" x="952" y="68">Notification</text>
+<text class="sb" x="952" y="82">push → route</text>
+<line class="ar tick" x1="1046" y1="92" x2="1046" y2="128" marker-end="url(#ah)"/>
+<rect class="zone" x="44" y="128" width="1136" height="302" rx="2"/>
+<text class="zl" x="60" y="152">DISCOVERY: public, indexable</text>
+<text class="zn" x="1164" y="152" text-anchor="end">carries advertising</text>
+<rect class="box " x="60" y="158" width="266" height="92" rx="2"/>
+<text class="bt" x="72" y="180">Home</text>
+<text class="rt" x="72" y="195">#/</text>
+<text class="sb" x="72" y="209">9 sections · finder</text>
+<text class="sb" x="72" y="223">ticker · hero · vibes</text>
+<rect class="admark" x="310" y="167" width="8" height="8"/>
+<rect class="box " x="334" y="158" width="266" height="92" rx="2"/>
+<text class="bt" x="346" y="180">Season calendar</text>
+<text class="rt" x="346" y="195">#/calendar</text>
+<text class="sb" x="346" y="209">Aug–Oct 2026 · 3 filters</text>
+<text class="sb" x="346" y="223">filters repaint the grid</text>
+<rect class="admark" x="584" y="167" width="8" height="8"/>
+<rect class="box " x="608" y="158" width="266" height="92" rx="2"/>
+<text class="bt" x="620" y="180">Explore</text>
+<text class="rt" x="620" y="195">#/explore</text>
+<text class="sb" x="620" y="209">facets: vibe/area/price</text>
+<text class="sb" x="620" y="223">sort · empty state</text>
+<rect class="admark" x="858" y="167" width="8" height="8"/>
+<rect class="box " x="882" y="158" width="266" height="92" rx="2"/>
+<text class="bt" x="894" y="180">Guides</text>
+<text class="rt" x="894" y="195">#/guides · /guide/:id</text>
+<text class="sb" x="894" y="209">index + article</text>
+<text class="sb" x="894" y="223">guide story placement</text>
+<rect class="admark" x="1132" y="167" width="8" height="8"/>
+<rect class="box " x="60" y="266" width="266" height="84" rx="2"/>
+<text class="bt" x="72" y="288">Seasons</text>
+<text class="rt" x="72" y="303">#/seasons · /season/:id</text>
+<text class="sb" x="72" y="317">editorial framing</text>
+<text class="sb" x="72" y="331">→ dates live in calendar</text>
+<rect class="box " x="334" y="266" width="266" height="84" rx="2"/>
+<text class="bt" x="346" y="288">Vendors</text>
+<text class="rt" x="346" y="303">#/hosts · /host/:id</text>
+<text class="sb" x="346" y="317">verified hosts · listings</text>
+<rect class="box " x="608" y="266" width="266" height="84" rx="2"/>
+<text class="bt" x="620" y="288">Help</text>
+<text class="rt" x="620" y="303">#/help</text>
+<text class="sb" x="620" y="317">fees · holds · refunds</text>
+<rect class="box " x="882" y="266" width="266" height="84" rx="2"/>
+<text class="bt" x="894" y="288">Saved</text>
+<text class="rt" x="894" y="303">#/account/saved</text>
+<text class="sb" x="894" y="317">behind the auth wall</text>
+<text class="nt" x="60" y="378">Every card in every grid links to one place. Discovery is many doors into a single room.</text>
+<line class="ar" x1="193" y1="390" x2="193" y2="462" marker-end="url(#ah)"/>
+<line class="ar" x1="467" y1="390" x2="467" y2="462" marker-end="url(#ah)"/>
+<line class="ar" x1="741" y1="390" x2="741" y2="462" marker-end="url(#ah)"/>
+<line class="ar" x1="1015" y1="390" x2="1015" y2="462" marker-end="url(#ah)"/>
+<text class="al" x="620" y="410" text-anchor="middle">select an experience</text>
+<rect class="box hub" x="44" y="462" width="1136" height="134" rx="2"/>
+<text class="bt" x="56" y="484">Experience detail</text>
+<text class="rt" x="56" y="499">#/experience/:id</text>
+<text class="sb" x="56" y="516">Every card in every grid resolves here. One template, one kind of listing.</text>
+<rect class="chip ok" x="56" y="530" width="150" height="18" rx="1"/>
+<text class="cp" x="131.0" y="543" text-anchor="middle">tiers + quantity</text>
+<text class="sb" x="216" y="544">sold-out tiers disabled, not hidden · quantity capped at tier.left</text>
+<rect class="chip ok" x="56" y="558" width="150" height="18" rx="1"/>
+<text class="cp" x="131.0" y="571" text-anchor="middle">live total</text>
+<text class="sb" x="216" y="572">face + 5% recomputed on every change · continue starts the hold</text>
+<rect class="box gate" x="44" y="628" width="1136" height="96" rx="2"/>
+<text class="bt" x="56" y="650">The auth wall</text>
+<text class="rt" x="56" y="665">#/login</text>
+<text class="sb" x="56" y="682">Records intent <tspan class="mono">{ kind, id, back }</tspan> before redirecting, and replays it on success. Save, checkout and every account route pass through here.</text>
+<text class="sb" x="56" y="700">Nothing the user chose is lost. This is the piece to build before checkout, because every later flow depends on it.</text>
+<path class="ar gold" d="M 1160 660 C 1196 660 1196 470 1160 470" fill="none" marker-end="url(#ah)"/>
+<text class="al" x="1204" y="566" text-anchor="start">replay intent → return to origin</text>
+<line class="ar" x1="604" y1="596" x2="604" y2="628" marker-end="url(#ah)"/>
+<text class="al" x="604.0" y="606.0" text-anchor="middle">ticketed only</text>
+<rect class="zone stop" x="44" y="756" width="1136" height="398" rx="2"/>
+<text class="zl" x="60" y="780">BOOKING: the paid path</text>
+<text class="zn" x="1164" y="780" text-anchor="end">NO ADVERTISING · BY PLACEMENT, NOT YET ENFORCED</text>
+<rect class="box " x="60" y="788" width="244" height="78" rx="2"/>
+<text class="bt" x="72" y="810">Cart</text>
+<text class="rt" x="72" y="825">in memory</text>
+<text class="sb" x="72" y="839">{ id, tier, qty }</text>
+<text class="sb" x="72" y="853">qty capped at tier.left</text>
+<rect class="box " x="328" y="788" width="244" height="78" rx="2"/>
+<text class="bt" x="340" y="810">Seat hold</text>
+<text class="rt" x="340" y="825">server-owned TTL</text>
+<text class="sb" x="340" y="839">HOLD_SECS 600 · WARN 180</text>
+<text class="sb" x="340" y="853">release raises availability</text>
+<rect class="box " x="596" y="788" width="244" height="78" rx="2"/>
+<text class="bt" x="608" y="810">Checkout</text>
+<text class="rt" x="608" y="825">#/checkout</text>
+<text class="sb" x="608" y="839">total = face + 5%</text>
+<text class="sb" x="608" y="853">recomputed server-side</text>
+<rect class="box " x="864" y="788" width="300" height="78" rx="2"/>
+<text class="bt" x="876" y="810">Payment rails</text>
+<text class="rt" x="876" y="825">3</text>
+<text class="sb" x="876" y="839">Card: processor hosted field</text>
+<text class="sb" x="876" y="853">Transfer: one-time acct · USSD</text>
+<line class="ar" x1="304" y1="827" x2="328" y2="827" marker-end="url(#ah)"/>
+<line class="ar" x1="572" y1="827" x2="596" y2="827" marker-end="url(#ah)"/>
+<line class="ar" x1="840" y1="827" x2="864" y2="827" marker-end="url(#ah)"/>
+<text class="nt" x="60" y="898">Five outcomes. Four of them are failure states, and all four ship in the same release as the success path.</text>
+<rect class="box ok" x="60" y="914" width="212" height="86" rx="2"/>
+<text class="bt" x="72" y="936">Confirmed</text>
+<text class="rt" x="72" y="951">#/confirmed</text>
+<text class="sb" x="72" y="965">pass issued · 315 pts pending</text>
+<rect class="box bad" x="280" y="914" width="212" height="86" rx="2"/>
+<text class="bt" x="292" y="936">Declined</text>
+<text class="rt" x="292" y="951">#/failed/declined</text>
+<text class="sb" x="292" y="965">nothing taken · hold survives</text>
+<rect class="box warn" x="500" y="914" width="212" height="86" rx="2"/>
+<text class="bt" x="512" y="936">Bank timeout</text>
+<text class="rt" x="512" y="951">#/failed/timeout</text>
+<text class="sb" x="512" y="965">outcome unknown</text>
+<text class="sb" x="512" y="979">“Do not pay twice.”</text>
+<rect class="box warn" x="720" y="914" width="212" height="86" rx="2"/>
+<text class="bt" x="732" y="936">Underpaid</text>
+<text class="rt" x="732" y="951">#/failed/underpaid</text>
+<text class="sb" x="732" y="965">short transfer returned</text>
+<rect class="box bad" x="940" y="914" width="212" height="86" rx="2"/>
+<text class="bt" x="952" y="936">Hold expired</text>
+<text class="rt" x="952" y="951">#/failed/expired</text>
+<text class="sb" x="952" y="965">seats back on sale</text>
+<line class="ar" x1="1014" y1="866" x2="1014" y2="906" marker-end="url(#ah)"/>
+<text class="al" x="600" y="912" text-anchor="middle">on submit</text>
+<line class="ar nohead" x1="386" y1="1000" x2="386" y2="1050"/>
+<line class="ar nohead" x1="606" y1="1000" x2="606" y2="1050"/>
+<line class="ar nohead" x1="826" y1="1000" x2="826" y2="1050"/>
+<line class="ar nohead" x1="826" y1="1050" x2="276" y2="1050"/>
+<path class="ar" d="M 276 1050 L 276 884 L 618 884 L 618 868" fill="none" marker-end="url(#ah)"/>
+<text class="al" x="556" y="1070" text-anchor="middle">retry, the hold is still running</text>
+<path class="ar bad" d="M 1046 1000 L 1046 1128 L 22 1128 L 22 530 L 40 530" fill="none" marker-end="url(#ah)"/>
+<text class="al bad" x="640" y="1148" text-anchor="middle">hold expired: seats released, nothing charged, start again</text>
+<rect class="zone" x="44" y="1188" width="1136" height="336" rx="2"/>
+<text class="zl" x="60" y="1212">FULFILMENT</text>
+<text class="zn" x="1164" y="1212" text-anchor="end">no advertising</text>
+<rect class="box " x="60" y="1220" width="250" height="96" rx="2"/>
+<text class="bt" x="72" y="1242">Confirmation</text>
+<text class="rt" x="72" y="1257">#/confirmed</text>
+<text class="sb" x="72" y="1271">receipt · reference</text>
+<text class="sb" x="72" y="1285">points pending until scan</text>
+<rect class="box " x="334" y="1220" width="274" height="96" rx="2"/>
+<text class="bt" x="346" y="1242">Pass</text>
+<text class="rt" x="346" y="1257">#/pass/:ref</text>
+<text class="sb" x="346" y="1271">shell cached · payload not yet</text>
+<text class="sb" x="346" y="1285">signed reference, not the pixels</text>
+<rect class="box ok" x="632" y="1220" width="250" height="96" rx="2"/>
+<text class="bt" x="644" y="1242">Gate</text>
+<text class="rt" x="644" y="1257">#/gate/ok|no/:ref</text>
+<text class="sb" x="644" y="1271">staff view · cached list</text>
+<text class="sb" x="644" y="1285">one scan, then it stops</text>
+<rect class="box " x="906" y="1220" width="258" height="96" rx="2"/>
+<text class="bt" x="918" y="1242">Transfer / Reschedule</text>
+<text class="rt" x="918" y="1257">#/transfer · /reschedule</text>
+<text class="sb" x="918" y="1271">transfer voids your pass</text>
+<text class="sb" x="918" y="1285">date change keeps the price</text>
+<line class="ar" x1="310" y1="1268" x2="334" y2="1268" marker-end="url(#ah)"/>
+<line class="ar" x1="608" y1="1268" x2="632" y2="1268" marker-end="url(#ah)"/>
+<line class="ar" x1="882" y1="1268" x2="906" y2="1268" marker-end="url(#ah)"/>
+<text class="nt" x="60" y="1352">Pass states: the whole set, not just the happy one.</text>
+<rect class="chip ok" x="60" y="1364" width="120" height="18" rx="1"/>
+<text class="cp" x="120.0" y="1377" text-anchor="middle">valid</text>
+<rect class="chip warn" x="188" y="1364" width="120" height="18" rx="1"/>
+<text class="cp" x="248.0" y="1377" text-anchor="middle">pending</text>
+<rect class="chip ok" x="316" y="1364" width="120" height="18" rx="1"/>
+<text class="cp" x="376.0" y="1377" text-anchor="middle">used</text>
+<rect class="chip bad" x="444" y="1364" width="120" height="18" rx="1"/>
+<text class="cp" x="504.0" y="1377" text-anchor="middle">void</text>
+<rect class="chip chip" x="572" y="1364" width="120" height="18" rx="1"/>
+<text class="cp" x="632.0" y="1377" text-anchor="middle">offline</text>
+<text class="sb" x="700" y="1378">pending = payment still confirming · used = scanned in · void = transferred away</text>
+<text class="nt" x="60" y="1420">98.4% first-try scans is a published promise. It depends on the pass being cached before the user reaches the venue,</text>
+<text class="nt" x="60" y="1438">and on the gate resolving from its own cached list. Both are service-worker work, not a nice-to-have.</text>
+<line class="ar" x1="612" y1="1154" x2="612" y2="1188" marker-end="url(#ah)"/>
+<rect class="zone" x="1216" y="128" width="460" height="384" rx="2"/>
+<text class="zl" x="1232" y="152">ADVERTISING</text>
+<text class="zn" x="1660" y="152" text-anchor="end">the revenue product</text>
+<text class="nt" x="1232" y="178">Four placements, one standard. A buyer can</text>
+<text class="nt" x="1232" y="195">understand the whole inventory in one screen.</text>
+<rect class="admark" x="1232" y="215" width="7" height="7"/>
+<text class="bt" x="1248" y="224" style="font-size:12px">Editorial leaderboard</text>
+<text class="rt" x="1660" y="224" text-anchor="end">₦650,000</text>
+<text class="sb dim" x="1248" y="238">970 × 250 / 320 × 100</text>
+<text class="sb dim" x="1660" y="238" text-anchor="end">Homepage, between chapters</text>
+<rect class="admark" x="1232" y="255" width="7" height="7"/>
+<text class="bt" x="1248" y="264" style="font-size:12px">Native discovery card</text>
+<text class="rt" x="1660" y="264" text-anchor="end">₦450,000</text>
+<text class="sb dim" x="1248" y="278">1200 × 900 · 4:3</text>
+<text class="sb dim" x="1660" y="278" text-anchor="end">Explore, after three organic</text>
+<rect class="admark" x="1232" y="295" width="7" height="7"/>
+<text class="bt" x="1248" y="304" style="font-size:12px">Guide story placement</text>
+<text class="rt" x="1660" y="304" text-anchor="end">₦520,000</text>
+<text class="sb dim" x="1248" y="318">1080 × 1350 · 4:5</text>
+<text class="sb dim" x="1660" y="318" text-anchor="end">Inside editorial guides</text>
+<rect class="admark" x="1232" y="335" width="7" height="7"/>
+<text class="bt" x="1248" y="344" style="font-size:12px">Calendar sponsor</text>
+<text class="rt" x="1660" y="344" text-anchor="end">₦380,000</text>
+<text class="sb dim" x="1248" y="358">728 × 90 / 320 × 100</text>
+<text class="sb dim" x="1660" y="358" text-anchor="end">Below the planning grid</text>
+<line class="rule" x1="1232" y1="370" x2="1660" y2="370"/>
+<text class="zl" x="1232" y="392">SELF-SERVE FUNNEL · #/advertise</text>
+<rect class="box" x="1232" y="402" width="104" height="30" rx="2"/>
+<text class="cp" x="1284.0" y="421" text-anchor="middle">Creative</text>
+<line class="ar" x1="1336" y1="417" x2="1344" y2="417" marker-end="url(#ah)"/>
+<rect class="box" x="1346" y="402" width="104" height="30" rx="2"/>
+<text class="cp" x="1398.0" y="421" text-anchor="middle">Owner review</text>
+<line class="ar" x1="1450" y1="417" x2="1458" y2="417" marker-end="url(#ah)"/>
+<rect class="box" x="1460" y="402" width="104" height="30" rx="2"/>
+<text class="cp" x="1512.0" y="421" text-anchor="middle">Payment</text>
+<line class="ar" x1="1564" y1="417" x2="1572" y2="417" marker-end="url(#ah)"/>
+<rect class="box" x="1574" y="402" width="104" height="30" rx="2"/>
+<text class="cp" x="1626.0" y="421" text-anchor="middle">Live</text>
+<text class="sb stop" x="1232" y="456">Every unit is labelled, and the label carries the size.</text>
+<text class="sb stop" x="1232" y="472">Nothing calls adSlot from the paid path, but that is</text>
+<text class="sb stop" x="1232" y="488">convention. There is no AD_FREE guard in the build yet.</text>
+<rect class="zone" x="1216" y="540" width="460" height="196" rx="2"/>
+<text class="zl" x="1232" y="564">PWA + OFFLINE SHELL</text>
+<text class="rt" x="1232" y="590">sw.js · cache naijago-shell-v1.4.1</text>
+<text class="sb" x="1232" y="610">Network first, cache fallback, then index.html.</text>
+<text class="sb" x="1232" y="626">23 shell files cached at install, registered by an</text>
+<text class="sb" x="1232" y="642">inline script in index.html.</text>
+<text class="sb stop" x="1232" y="666">The shell is cached. The pass payload is not. That</text>
+<text class="sb stop" x="1232" y="682">is the gap between 98.4% and the build.</text>
+<rect class="box sm" x="1232" y="696" width="82" height="26" rx="2"/>
+<text class="cp" x="1273" y="713" text-anchor="middle">Home</text>
+<rect class="box sm" x="1318" y="696" width="82" height="26" rx="2"/>
+<text class="cp" x="1359" y="713" text-anchor="middle">Explore</text>
+<rect class="box sm" x="1404" y="696" width="82" height="26" rx="2"/>
+<text class="cp" x="1445" y="713" text-anchor="middle">Calendar</text>
+<rect class="box sm" x="1490" y="696" width="82" height="26" rx="2"/>
+<text class="cp" x="1531" y="713" text-anchor="middle">Saved</text>
+<rect class="box sm" x="1576" y="696" width="82" height="26" rx="2"/>
+<text class="cp" x="1617" y="713" text-anchor="middle">Passes</text>
+<rect class="zone" x="1216" y="756" width="460" height="240" rx="2"/>
+<text class="zl" x="1232" y="780">WAITLIST LOOP</text>
+<rect class="box " x="1232" y="786" width="200" height="62" rx="2"/>
+<text class="bt" x="1244" y="808">Join</text>
+<text class="rt" x="1244" y="823">#/waitlist/:id</text>
+<text class="sb" x="1244" y="837">position shown</text>
+<rect class="box " x="1460" y="786" width="200" height="62" rx="2"/>
+<text class="bt" x="1472" y="808">Offered</text>
+<text class="rt" x="1472" y="823">CLAIM_MINS 120</text>
+<text class="sb" x="1472" y="837">two hours to claim</text>
+<line class="ar" x1="1432" y1="817" x2="1460" y2="817" marker-end="url(#ah)"/>
+<rect class="box ok" x="1232" y="878" width="200" height="62" rx="2"/>
+<text class="bt" x="1244" y="900">Claim</text>
+<text class="rt" x="1244" y="915">→ cart</text>
+<text class="sb" x="1244" y="929">drops into checkout</text>
+<rect class="box bad" x="1460" y="878" width="200" height="62" rx="2"/>
+<text class="bt" x="1472" y="900">Lapse</text>
+<text class="rt" x="1472" y="915">window closed</text>
+<text class="sb" x="1472" y="929">back of the queue</text>
+<path class="ar bad" d="M 1560 848 L 1560 878" fill="none" marker-end="url(#ah)"/>
+<path class="ar ok" d="M 1332 848 L 1332 878" fill="none" marker-end="url(#ah)"/>
+<text class="nt" x="1232" y="966">A lapsed offer goes to the next person and the holder returns to the</text>
+<text class="nt" x="1232" y="982">back, not the front. Ordering and the TTL are server-side.</text>
+<rect class="zone" x="1216" y="1024" width="460" height="352" rx="2"/>
+<text class="zl" x="1232" y="1048">ACCOUNT: behind the auth wall</text>
+<text class="zn" x="1660" y="1048" text-anchor="end">no advertising</text>
+<rect class="box sm" x="1232" y="1064" width="206" height="34" rx="2"/>
+<text class="bt sm" x="1242" y="1078">Overview</text>
+<text class="rt sm" x="1242" y="1091">#/account</text>
+<rect class="box sm" x="1454" y="1064" width="206" height="34" rx="2"/>
+<text class="bt sm" x="1464" y="1078">Bookings</text>
+<text class="rt sm" x="1464" y="1091">/bookings</text>
+<rect class="box sm" x="1232" y="1104" width="206" height="34" rx="2"/>
+<text class="bt sm" x="1242" y="1118">Passes</text>
+<text class="rt sm" x="1242" y="1131">/passes</text>
+<rect class="box sm" x="1454" y="1104" width="206" height="34" rx="2"/>
+<text class="bt sm" x="1464" y="1118">Saved</text>
+<text class="rt sm" x="1464" y="1131">/saved</text>
+<rect class="box sm" x="1232" y="1144" width="206" height="34" rx="2"/>
+<text class="bt sm" x="1242" y="1158">Plans</text>
+<text class="rt sm" x="1242" y="1171">/plans · clash detection</text>
+<rect class="box sm" x="1454" y="1144" width="206" height="34" rx="2"/>
+<text class="bt sm" x="1464" y="1158">Notifications</text>
+<text class="rt sm" x="1464" y="1171">/notifications</text>
+<rect class="box sm" x="1232" y="1184" width="206" height="34" rx="2"/>
+<text class="bt sm" x="1242" y="1198">Reviews</text>
+<text class="rt sm" x="1242" y="1211">/reviews · 14-day window</text>
+<rect class="box sm" x="1454" y="1184" width="206" height="34" rx="2"/>
+<text class="bt sm" x="1464" y="1198">Settings</text>
+<text class="rt sm" x="1464" y="1211">/settings · NDPR export</text>
+<text class="nt" x="1232" y="1236">Plans flag a real clash: the rave starts 19:00 in Ilashe and</text>
+<text class="nt" x="1232" y="1252">Suya &amp; Jazz 20:00 in Ikoyi. A boat and a bridge in sixty minutes.</text>
+<line class="rule" x1="1232" y1="1272" x2="1660" y2="1272"/>
+<text class="zl" x="1232" y="1296">THE MONEY: two fees, never conflated</text>
+<text class="sb" x="1232" y="1320">Buyer pays face <tspan class="mono ok">+ 5%</tspan> on top.  2 × ₦15,000 = ₦30,000 + ₦1,500 = <tspan class="mono">₦31,500</tspan></text>
+<text class="sb" x="1232" y="1340">Host pays <tspan class="mono gold">8%</tspan> out of face and keeps 92%.  ₦3,660,000 − ₦292,800 = <tspan class="mono">₦3,367,200</tspan></text>
+<text class="sb dim" x="1232" y="1358">Separate ledger entries. Never a single “platform fee” column.</text>
+<rect class="zone" x="44" y="1556" width="1632" height="214" rx="2"/>
+<text class="zl" x="60" y="1580">PARTNER CONSOLE: host side</text>
+<text class="zn" x="1660" y="1580" text-anchor="end">no advertising</text>
+<rect class="box " x="60" y="1588" width="258" height="90" rx="2"/>
+<text class="bt" x="72" y="1610">Dashboard</text>
+<text class="rt" x="72" y="1625">#/partner</text>
+<text class="sb" x="72" y="1639">sold / left / gross / payout</text>
+<text class="sb" x="72" y="1653">bars sum to the sold figure</text>
+<rect class="box " x="328" y="1588" width="258" height="90" rx="2"/>
+<text class="bt" x="340" y="1610">Listings</text>
+<text class="rt" x="340" y="1625">#/partner/listings</text>
+<text class="sb" x="340" y="1639">draft → in review → live</text>
+<text class="sb" x="340" y="1653">cannot sell in the first two</text>
+<rect class="box " x="596" y="1588" width="258" height="90" rx="2"/>
+<text class="bt" x="608" y="1610">Listing editor</text>
+<text class="rt" x="608" y="1625">#/partner/listing</text>
+<text class="sb" x="608" y="1639">shows what the guest pays</text>
+<text class="sb" x="608" y="1653">and what the host receives</text>
+<rect class="box " x="864" y="1588" width="258" height="90" rx="2"/>
+<text class="bt" x="876" y="1610">Payouts</text>
+<text class="rt" x="876" y="1625">#/partner/payouts</text>
+<text class="sb" x="876" y="1639">held 48h after the gate closes</text>
+<text class="sb" x="876" y="1653">every row is 92% of its gross</text>
+<rect class="box " x="1132" y="1588" width="258" height="90" rx="2"/>
+<text class="bt" x="1144" y="1610">Refunds</text>
+<text class="rt" x="1144" y="1625">#/partner/refunds</text>
+<text class="sb" x="1144" y="1639">refunded / processing / declined</text>
+<text class="sb" x="1144" y="1653">card 5–10 days, the scheme’s speed</text>
+<rect class="box " x="1400" y="1588" width="258" height="90" rx="2"/>
+<text class="bt" x="1412" y="1610">Door scanner</text>
+<text class="rt" x="1412" y="1625">#/partner/scanner</text>
+<text class="sb" x="1412" y="1639">cached guest list</text>
+<text class="sb" x="1412" y="1653">works with no signal</text>
+<text class="nt" x="60" y="1742">A listing goes draft → in review → live. A human reviews it; nothing says “automatically”.</text>
+<rect class="zone" x="44" y="1802" width="1632" height="236" rx="2"/>
+<text class="zl" x="60" y="1826">WHAT CANNOT LIVE IN THE CLIENT</text>
+<text class="zn" x="1660" y="1826" text-anchor="end">the prototype fakes all of this</text>
+<rect class="admark srv" x="60" y="1848" width="8" height="8"/>
+<text class="bt" x="78" y="1858">Seat holds</text>
+<text class="sb dim" x="78" y="1874">atomic TTL rows: two people clicking the last two seats must not both win</text>
+<rect class="admark srv" x="872" y="1848" width="8" height="8"/>
+<text class="bt" x="890" y="1858">Price + fee</text>
+<text class="sb dim" x="890" y="1874">recompute face + 5% server-side; never trust a total that arrived from a browser</text>
+<rect class="admark srv" x="60" y="1894" width="8" height="8"/>
+<text class="bt" x="78" y="1904">Payment</text>
+<text class="sb dim" x="78" y="1920">processor-hosted card field · verify the webhook signature, not the redirect</text>
+<rect class="admark srv" x="872" y="1894" width="8" height="8"/>
+<text class="bt" x="890" y="1904">Idempotency</text>
+<text class="sb dim" x="890" y="1920">a key per attempt; the timeout state exists because the answer is unknown</text>
+<rect class="admark srv" x="60" y="1940" width="8" height="8"/>
+<text class="bt" x="78" y="1950">Pass issue + scan</text>
+<text class="sb dim" x="78" y="1966">signature minted server-side; the scan is a write that flips it to used</text>
+<rect class="admark srv" x="872" y="1940" width="8" height="8"/>
+<text class="bt" x="890" y="1950">Waitlist order</text>
+<text class="sb dim" x="890" y="1966">queue with a 2h TTL per offer; lapse moves it on and demotes the holder</text>
+<rect class="admark srv" x="60" y="1986" width="8" height="8"/>
+<text class="bt" x="78" y="1996">Payouts</text>
+<text class="sb dim" x="78" y="2012">48h after the gate; commission on gross; refunds itemised, not folded in</text>
+<rect class="admark srv" x="872" y="1986" width="8" height="8"/>
+<text class="bt" x="890" y="1996">Ad decisioning</text>
+<text class="sb dim" x="890" y="2012">slot request → server or ad server; density and exclusions enforced there too</text>
+<line class="rule" x1="44" y1="2074" x2="1676" y2="2074"/>
+<rect class="admark admark" x="44" y="2094" width="10" height="10"/>
+<text class="sb" x="74" y="2104">carries advertising</text>
+<rect class="admark ok" x="254" y="2094" width="10" height="10"/>
+<text class="sb" x="284" y="2104">success / settled</text>
+<rect class="admark warn" x="464" y="2094" width="10" height="10"/>
+<text class="sb" x="494" y="2104">unresolved</text>
+<rect class="admark bad" x="674" y="2094" width="10" height="10"/>
+<text class="sb" x="704" y="2104">failure / stop</text>
+<line class="ar dash" x1="884" y1="2100" x2="906" y2="2100"/>
+<text class="sb" x="914" y="2104">leaves the system</text>
+<text class="sb dim" x="1676" y="2104" text-anchor="end">Arrows carry the transition. Routes are hash routes, exactly as the prototype ships them.</text>
+</svg>
+    </div>
+  </figure>
+  <figcaption>The NaijaGo platform: discovery funnels into one experience screen; the auth wall records and replays
+  intent; the booking pipeline produces five outcomes; fulfilment ends at the gate. Side rails carry the four placements and the advertise funnel, the PWA offline shell,
+  the waitlist claim loop, the account area and the money model. The bottom band is the work that cannot live in
+  the client.</figcaption>
+
+  <section class="order">
+    <h2>Build it in this order</h2>
+    <ol>
+      <li><b>Tokens and the six shared components.</b> Everything else is assembled from them.</li>
+      <li><b>Chrome.</b> Ticker, header, footer, dock, dialogs, toast.</li>
+      <li><b>Homepage.</b> It exercises most of the component set in one go.</li>
+      <li><b>Explore and faceting</b>, then the experience detail screen.</li>
+      <li><b>The auth wall, with intent replay.</b> Before checkout, because every later flow depends on it.</li>
+      <li><b>Checkout, the hold, three rails and all four failure states together.</b> The failures are not a follow-up ticket.</li>
+      <li><b>Pass, offline caching, gate.</b> The service worker is the promise, not a nice-to-have.</li>
+      <li><b>The calendar</b>, then the account area, waitlist and plans.</li>
+      <li><b>Partner console.</b> Fewest users, most arithmetic, and it can wait.</li>
+      <li><b>Advertising last</b>: the four placements, then the self-serve funnel against a real ad server and payment rail.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+(function(){
+  var b=document.getElementById('zoom'), s=document.getElementById('scroll');
+  b.addEventListener('click',function(){
+    var on=b.getAttribute('aria-pressed')!=='true';
+    b.setAttribute('aria-pressed',String(on));
+    s.classList.toggle('actual',on);
+    b.textContent=on?'Fit to width':'Actual size';
+  });
+})();
+</script>
